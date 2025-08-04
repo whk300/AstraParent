@@ -1,0 +1,124 @@
+/* 1-14: Base & Background */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #fefbd8, #e0f7fa, #fce4ec, #e8f5e9);
+  color: #333;
+  line-height: 1.6;
+  padding: 0;
+}
+
+/* 15-28: Broadway Title & Import */
+@import url('https://fonts.cdnfonts.com/css/broadway');
+
+/* 29-40: Header Wrapper */
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  height: 140px;
+  border-bottom: 2px solid #eee;
+  background-color: transparent;
+  position: relative;
+}
+
+/* 41-48: Logo + Title */
+.logo-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.heart-logo {
+  height: 60px;
+  width: auto;
+  margin-right: 10px;
+}
+.header-wrapper h1 {
+  font-size: 2.2rem;
+  font-family: 'Broadway', sans-serif;
+  font-weight: bold;
+  color: #222;
+}
+
+/* 49-60: Search Container */
+.search-container {
+  width: 30%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.search-container input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* 61-74: Nav Menu */
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: #fff;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  gap: 15px;
+}
+nav a {
+  text-decoration: none;
+  color: #444;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+nav a:hover,
+nav a.active {
+  background: #fde4e0;
+  color: #b00000;
+}
+
+/* 75-86: Ad Banner */
+.ad-banner {
+  width: 100%;
+  max-width: 960px;
+  margin: 20px auto;
+  height: 90px;
+  background-color: #f2f2f2;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #666;
+}
+
+/* 87-100: FAQ Section */
+.faq-section {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.faq-section h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #222;
+  text-align: center;
+}
+.faq-section ul {
+  font-size: 18px;
+  line-height: 1.8;
+  list-style-type: none;
+  padding-left: 0;
+}
+.faq-section li strong {
+  color: #cc0000;
+}
