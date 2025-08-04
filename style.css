@@ -20,7 +20,25 @@ body {
 .logo-title {
   display: flex;
   align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background-color: transparent;
 }
+.text-group h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.text-group .tagline {
+  font-family: 'Open Sans', sans-serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 5px;
+}
+
 .logo-title h1 {
   font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
@@ -38,8 +56,8 @@ body {
 .heart-logo {
   height: 60px;
   width: auto;
-  display: block;
   background-color: transparent;
+  border: none;
 }
 
 
