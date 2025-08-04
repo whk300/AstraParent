@@ -6,32 +6,33 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
+ ont-family: 'Segoe UI', sans-serif;
   line-height: 1.6;
-  background: linear-gradient(to bottom, #fbeff5, #f6fafd, #f9fff0, #fff9ec);
+  margin: 0;
+  background: linear-gradient(135deg, #f5f7fa, #dbe9ec, #e6f0ee, #fdfdfd);
   color: #333;
-  padding-bottom: 50px;
 }
 
 /* === HEADER === */
 .header-wrapper {
-  display: flex;
-  justify-content: center;
+ display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  border-bottom: 1px solid #eee;
+  background: transparent;
+  height: 150px;
 }
 .header-wrapper h1 {
-  font-size: 1.8rem;
+  font-size: 2.2rem;
+  font-family: 'Broadway', sans-serif;
   font-weight: bold;
   color: #222;
-  display: flex;
-  align-items: center;
+  margin-left: 10px;
 }
 .heart-logo {
-  height: 40px;
-  vertical-align: middle;
-  margin-right: 10px;
+.logo {
+  height: 90px;
+  width: auto;
 }
 
 /* === NAVIGATION === */
@@ -105,4 +106,23 @@ body {
 .qa-section li {
   margin-bottom: 10px;
   font-size: 1rem;
+}
+  .logo-title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 70%;
+}
+
+.search-container {
+  width: 30%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.search-container input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 80%;
+  border-radius: 5px;
 }
