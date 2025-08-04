@@ -19,10 +19,20 @@ body {
 
 .logo-title {
   display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 10px 20px;
+  background-color: transparent; 
+}
+.heart-logo-container {
+  display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 20px;
-  background-color: transparent !important;
+  height: 100%;
+}
+.text-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .text-group h1 {
   font-family: 'Montserrat', sans-serif;
@@ -34,34 +44,32 @@ body {
 .text-group .tagline {
   font-family: 'Open Sans', sans-serif;
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #444;
-  margin-top: 4px;
-  margin-Left: 4px;
+  margin-top: 2px;
+  margin-left: 0px;  /* ✅ aligned perfectly with title */
 }
 
 .logo-title h1 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
+ font-family: 'Montserrat', sans-serif;
   font-weight: bold;
-  margin-left: 10px;
+  font-size: 2.5rem;
+  margin-bottom: 0;
 }
 .logo-title .tagline {
-  font-family: 'Open Sans', sans-serif;
+font-family: 'Open Sans', sans-serif;
   font-style: italic;
-  font-size: 0.8rem;
-  font-weight: normal;
-  color: #555;
+  font-size: 1rem;
+  color: #444;
+  margin-top: 2px;
+  margin-left: 0px;  /* ✅ aligned perfectly with title */
 }
 
 .heart-logo {
-  height: 60px;
+  height: 80px; /* 🆙 Increase size to match title + tagline */
   width: auto;
   background-color: transparent !important;
-  border: none;
-  box-shadow: none;
 }
-
 
 .search-container {
   width: 30%;
