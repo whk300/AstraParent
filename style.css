@@ -8,52 +8,40 @@ body {
 }
 
 .header-wrapper {
+  background: none;
+  padding: 20px 5%;
+  border-bottom: 2px solid #eee;
+}
+.header-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 5%;
-  height: 100px;
-  border-bottom: 2px solid #eee;
-  background: none;
+  flex-wrap: wrap;
 }
 
-.logo-title {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  padding: 10px 20px;
-  background-color: transparent; 
-}
-.heart-logo-container {
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-.logo-box {
-  width: 180px;
-  height: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 20px;
-}
-.heart-logo {
-  width: 100%;
-  height: auto;
+.header-logo img {
+  height: 90px;
+  width: auto;
   object-fit: contain;
+  background-color: transparent;
 }
-.text-group {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.header-title {
+  text-align: center;
+  flex: 1;
 }
-.text-group h1 {
+.header-title h1 {
   font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
   margin: 0;
 }
-
+.tagline {
+  font-family: 'Open Sans', sans-serif;
+  font-style: italic;
+  font-size: 1rem;
+  margin-top: 4px;
+  color: #444;
+}
 .text-group .tagline {
   font-family: 'Open Sans', sans-serif;
   font-style: italic;
@@ -63,29 +51,16 @@ body {
   margin-left: 0px;  /* ✅ aligned perfectly with title */
 }
 
-.logo-title h1 {
- font-family: 'Montserrat', sans-serif;
-  font-weight: bold;
-  font-size: 2.5rem;
-  margin-bottom: 0;
+.header-search {
+  min-width: 220px;
+  text-align: right;
 }
-.logo-title .tagline {
-font-family: 'Open Sans', sans-serif;
-  font-style: italic;
+.header-search input {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
   font-size: 1rem;
-  color: #444;
-  margin-top: 2px;
-  margin-left: 0px;  /* ✅ aligned perfectly with title */
-}
-
-.heart-logo {
-  height: 80px; /* 🆙 Increase size to match title + tagline */
-  width: auto;
-  background-color: transparent !important;
-}
-
-.search-container {
-  width: 30%;
+  width: 100%;
 }
 .search-container input {
   padding: 10px;
