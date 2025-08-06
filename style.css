@@ -40,7 +40,9 @@ nav.sticky-nav a:hover, nav.sticky-nav a.active { background: #f0f0f0; color: #0
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: flex-start;   /* left align */
+  justify-content: flex-start; /* top align */
+  text-align: left;
 }
 
 /* Responsive: Stack on mobile */
@@ -185,4 +187,22 @@ nav.sticky-nav a:hover, nav.sticky-nav a.active { background: #f0f0f0; color: #0
     max-width: 96vw;
     min-width: 0;
   }
+.faq-title {
+  font-weight: bold;
+  font-size: 1.08em;
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.5px;
 }
+.faq-question {
+  font-weight: bold;
+  margin-top: 6px;
+  display: block;
+  letter-spacing: 0.15px;
+}
+.faq-space {
+  height: 8px;
+  display: block;
+  content: '';
+}
+
