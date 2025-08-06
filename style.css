@@ -183,12 +183,7 @@ nav.sticky-nav a:hover, nav.sticky-nav a.active { background: #f0f0f0; color: #0
     flex-direction: column;
     gap: 28px;
   }
-  .faq-col {
-    max-width: 96vw;
-    min-width: 0;
-  }
-  
-.faq-title {
+ .faq-title {
   font-weight: bold;
   font-size: 1.08em;
   margin-bottom: 6px;
@@ -206,4 +201,3 @@ nav.sticky-nav a:hover, nav.sticky-nav a.active { background: #f0f0f0; color: #0
   display: block;
   content: '';
 }
-
