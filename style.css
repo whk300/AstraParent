@@ -161,3 +161,28 @@ nav.sticky-nav a:hover, nav.sticky-nav a.active { background: #f0f0f0; color: #0
     margin-top: 6px;
   }
 }
+.faq-two-col {
+  display: flex;
+  gap: 4vw;
+  justify-content: center;
+}
+.faq-col {
+  flex: 1 1 0;
+  min-width: 320px;
+  max-width: 500px;
+}
+.faq-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+@media (max-width: 1100px) {
+  .faq-two-col {
+    flex-direction: column;
+    gap: 28px;
+  }
+  .faq-col {
+    max-width: 96vw;
+    min-width: 0;
+  }
+}
