@@ -1,6 +1,6 @@
 
 body { font-family: 'Open Sans', sans-serif; background: #fff; color: #111; margin: 0; padding: 0; }
-.header-wrapper { padding: 20px 5%; border-bottom: 1px solid #ddd; }
+.header-wrapper { padding: 6px 5%;  /* WAS: 20px 5% */border-bottom: 1px solid #ddd;}
 .header-flex-v2 { display: flex; justify-content: space-between; align-items: center; }
 .title-block-v2 h1 { font-family: 'Elephant', serif; font-size: 2.6rem; font-weight: bold; margin: 0; color: #004d40; }
 .tagline { font-size: 1rem; font-style: italic; font-weight: bold; color: #222; }
