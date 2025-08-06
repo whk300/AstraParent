@@ -68,3 +68,84 @@ nav.sticky-nav a:hover, nav.sticky-nav a.active { background: #f0f0f0; color: #0
 .footer-bar .footer-left p { margin: 0; font-family: 'Elephant', serif; font-weight: bold; }
 .footer-bar .footer-right { display: flex; align-items: center; gap: 10px; }
 .footer-bar .footer-right img { width: 24px; height: 24px; }
+.faq-with-image {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 32px;
+  justify-content: center;
+}
+
+.faq-image-container {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* frame container sizing for desktop/tablet */
+  width: 120px;
+  max-width: 22vw;
+}
+
+.faq-frame-outer {
+  padding: 9px;
+  border-radius: 22px;
+  background: #e3f2fd; /* pastel blue outer frame */
+  display: flex;
+}
+.faq-frame-inner {
+  padding: 7px;
+  border-radius: 16px;
+  background: #fffde7; /* pastel yellow inner frame */
+  display: flex;
+}
+.faq-image-container img {
+  width: 80px;
+  max-width: 16vw;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #fff;
+  display: block;
+  box-shadow: 0 1px 12px 0 rgba(80,120,160,0.07), 0 0.5px 3px 0 rgba(80,130,90,0.06);
+}
+
+.faq-text-container {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.faq-text-container a {
+  display: block;
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  .faq-with-image {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .faq-image-container {
+    width: 70vw;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+  .faq-frame-outer, .faq-frame-inner {
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    margin: 0 auto;
+  }
+  .faq-image-container img {
+    width: 90px;
+    height: 90px;
+    max-width: 120px;
+    margin: 0 auto;
+  }
+}
