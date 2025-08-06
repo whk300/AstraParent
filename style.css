@@ -182,7 +182,9 @@ nav.sticky-nav a:hover, nav.sticky-nav a.active { background: #f0f0f0; color: #0
   .faq-two-col {
     flex-direction: column;
     gap: 28px;
-  }
+ }
+}
+
  .faq-title {
   font-weight: bold;
   font-size: 1.08em;
