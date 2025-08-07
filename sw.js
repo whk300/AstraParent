@@ -15,12 +15,13 @@ const STATIC_ASSETS = [
   '/style.css',
   '/script.js',
   '/manifest.json',
-  'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Montserrat:wght@700&display=swap',
-  'https://cdn-icons-png.flaticon.com/24/174/174857.png',
-  'https://cdn-icons-png.flaticon.com/24/2111/2111463.png',
-  'https://cdn-icons-png.flaticon.com/24/145/145802.png',
-  'https://cdn-icons-png.flaticon.com/24/145/145808.png',
-  'https://cdn-icons-png.flaticon.com/24/3046/3046121.png'
+  '/images/Pregnancy Drinking Water.avif',
+  '/images/Infant Just born.avif', // Make sure you have this image
+  '/images/Toddler Not Happy.avif',
+  '/images/Preschooler pointing Who I am.avif',
+  '/images/Schoolers on Desk.avif',
+  '/images/Early Teens Peer Pressure.avif', // Make sure you have this image
+  '/images/Late Teens with books and bag.avif'
 ];
 
 // Dynamic content that can be cached
