@@ -32,16 +32,22 @@ class ClearCutParentingApp {
   /**
    * Initialize the application
    */
-  init() {
-    this.cacheElements();
-    this.setupEventListeners();
-    this.initializeFeatures();
-    this.setupPerformanceOptimizations();
-    this.initAccessibility();
-    
-    // Mark as initialized
-    this.state.isLoaded = true;
-    console.log('🚀 ClearCutParenting App initialized successfully');
+    init() {
+    try {
+      this.cacheElements();
+      this.setupEventListeners();
+      this.initializeFeatures();
+      this.setupPerformanceOptimizations();
+      this.initAccessibility();
+
+      // Mark as initialized
+      this.state.isLoaded = true;
+      console.log('🚀 ClearCutParenting App initialized successfully');
+    } catch (err) {
+      console.error('Init error:', err);
+    } finally {
+      this.safeHideOverlay();  // ensure overlay always goes away
+    }
   }
 
   /**
@@ -574,6 +580,20 @@ class ClearCutParentingApp {
         }
       }, 500);
     }, 1200);
+  }
+  safeHideOverlay() {
+    try {
+      const overlay = document.getElementById('loadingOverlay');
+      if (!overlay) return;
+      overlay.classList.add('fade-out');
+      setTimeout(() => {
+        if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      }, 500);
+    } catch (e) {
+      // last-ditch: force-remove
+      const overlay = document.getElementById('loadingOverlay');
+      if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    }
   }
 
   /**
