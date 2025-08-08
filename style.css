@@ -1,4 +1,4 @@
-/* ===== MINIMALIST DESIGN SYSTEM ===== */
+/* ===== MINIMALIST DESIGN SYSTEM - PURE WHITE VERSION ===== */
 :root {
   /* Green Brand Colors */
   --primary-green: #2D5A27;
@@ -6,15 +6,15 @@
   --light-green: #E8F5E8;
   --accent-green: #6B8E6B;
   
-  /* Neutral Colors */
+  /* Pure White Neutral Colors */
   --white: #FFFFFF;
   --cream: #FFFFFF;
   --light-gray: #FFFFFF;
-  --medium-gray: #FFFFFF;
+  --medium-gray: #E5E7EB;
   --text-gray: #374151;
   --dark-gray: #1F2937;
   
-  /* Soft Pastels for Sections */
+  /* Soft Pastels for Question Sections */
   --pastel-yellow: #FFFEF2;
   --pastel-blue: #F0F9FF;
   --pastel-pink: #FDF2F8;
@@ -300,7 +300,7 @@ body {
 
 /* ===== FAQ SECTION ===== */
 .faq-section {
-  background: var(--cream);
+  background: var(--white);
   border-radius: var(--radius-xl);
   padding: var(--space-2xl);
   box-shadow: var(--shadow-sm);
@@ -415,13 +415,14 @@ body {
 
 /* ===== PARENT STORY SECTION ===== */
 .parent-story {
-  background: var(--light-gray);
+  background: var(--white);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
   position: sticky;
   top: 180px;
   height: fit-content;
   border-left: 4px solid var(--accent-green);
+  box-shadow: var(--shadow-sm);
 }
 
 .story-title {
@@ -485,7 +486,7 @@ body {
 
 /* ===== FOOTER ===== */
 .footer {
-  background: var(--light-gray);
+  background: var(--white);
   border-top: 1px solid var(--medium-gray);
   margin-top: var(--space-2xl);
 }
@@ -649,7 +650,7 @@ body {
 }
 
 .search-result-item:hover {
-  background: var(--light-gray);
+  background: var(--light-green);
 }
 
 .search-result-item.no-results {
@@ -908,7 +909,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--light-gray);
+  background: var(--white);
 }
 
 ::-webkit-scrollbar-thumb {
