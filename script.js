@@ -1,17 +1,16 @@
 /**
- * ClearCutParenting - Professional Website Application
- * Top 0.001% Website Design Implementation
- * Advanced JavaScript with Modern Architecture
+ * ClearCutParenting - White Background Minimalist Design Implementation
+ * Optimized JavaScript for Performance and User Experience
  */
 
-class ClearCutParentingApp {
+class WhiteMinimalistParentingApp {
   constructor() {
     this.config = {
-      searchDelay: 300,
+      searchDelay: 200,
       scrollThrottle: 16,
-      resizeDebounce: 250,
+      resizeDebounce: 150,
       animationDuration: 300,
-      toastDuration: 4000
+      toastDuration: 3000
     };
     
     this.state = {
@@ -20,7 +19,8 @@ class ClearCutParentingApp {
       searchResults: [],
       activeSection: 'pregnancy',
       lastScrollY: 0,
-      searchTimeout: null
+      searchTimeout: null,
+      isSearching: false
     };
     
     this.elements = {};
@@ -32,7 +32,7 @@ class ClearCutParentingApp {
   /**
    * Initialize the application
    */
-    init() {
+  init() {
     try {
       this.cacheElements();
       this.setupEventListeners();
@@ -40,13 +40,11 @@ class ClearCutParentingApp {
       this.setupPerformanceOptimizations();
       this.initAccessibility();
 
-      // Mark as initialized
       this.state.isLoaded = true;
-      console.log('🚀 ClearCutParenting App initialized successfully');
+      console.log('✨ Minimalist ClearCutParenting App initialized');
     } catch (err) {
-      console.error('Init error:', err);
-    } finally {
-      this.safeHideOverlay();  // ensure overlay always goes away
+      console.error('❌ Initialization error:', err);
+      this.handleInitError();
     }
   }
 
@@ -60,8 +58,8 @@ class ClearCutParentingApp {
       searchInput: document.getElementById('searchInput'),
       searchResults: document.getElementById('search-results'),
       toastContainer: document.getElementById('toast-container'),
-      navItems: document.querySelectorAll('.nav-item[data-section]'),
-      faqItems: document.querySelectorAll('.faq-with-image'),
+      navLinks: document.querySelectorAll('.nav-link[data-section]'),
+      questionCards: document.querySelectorAll('.question-card'),
       storyButtons: document.querySelectorAll('.story-btn'),
       images: document.querySelectorAll('img[loading="lazy"]')
     };
@@ -71,80 +69,164 @@ class ClearCutParentingApp {
    * Setup all event listeners
    */
   setupEventListeners() {
-    // Scroll events with throttling
-    window.addEventListener('scroll', this.throttle(() => {
-      this.handleScroll();
-    }, this.config.scrollThrottle), { passive: true });
-
-    // Resize events with debouncing
+    // Optimized scroll handling
+    this.setupScrollHandling();
+    
+    // Window events
     window.addEventListener('resize', this.debounce(() => {
       this.handleResize();
     }, this.config.resizeDebounce));
 
-    // Load event
     window.addEventListener('load', () => {
       this.handlePageLoad();
     });
 
     // Search functionality
-    if (this.elements.searchInput) {
-      this.elements.searchInput.addEventListener('input', (e) => {
-        this.handleSearch(e.target.value);
-      });
+    this.setupSearchHandling();
 
-      this.elements.searchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          this.executeSearch(e.target.value);
-        } else if (e.key === 'Escape') {
-          this.clearSearch();
-        }
-      });
+    // Navigation
+    this.setupNavigationHandling();
 
-      // Click outside to close search results
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.header-search')) {
-          this.hideSearchResults();
-        }
-      });
-    }
+    // Question cards interaction
+    this.setupQuestionCardHandling();
 
-    // Navigation click events
-    this.elements.navItems.forEach(navItem => {
-      navItem.addEventListener('click', (e) => {
+    // Story buttons
+    this.setupStoryButtonHandling();
+
+    // Keyboard navigation
+    this.setupKeyboardHandling();
+
+    // Click outside handlers
+    this.setupClickOutsideHandlers();
+  }
+
+  /**
+   * Setup scroll handling with optimization
+   */
+  setupScrollHandling() {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          this.handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+  }
+
+  /**
+   * Setup search input handling
+   */
+  setupSearchHandling() {
+    if (!this.elements.searchInput) return;
+
+    this.elements.searchInput.addEventListener('input', (e) => {
+      this.handleSearchInput(e.target.value);
+    });
+
+    this.elements.searchInput.addEventListener('keydown', (e) => {
+      this.handleSearchKeydown(e);
+    });
+
+    this.elements.searchInput.addEventListener('focus', () => {
+      this.handleSearchFocus();
+    });
+
+    this.elements.searchInput.addEventListener('blur', () => {
+      // Delay hiding to allow click on results
+      setTimeout(() => this.hideSearchResults(), 150);
+    });
+  }
+
+  /**
+   * Setup navigation handling
+   */
+  setupNavigationHandling() {
+    this.elements.navLinks.forEach(navLink => {
+      navLink.addEventListener('click', (e) => {
         e.preventDefault();
-        this.handleNavigation(navItem);
+        this.handleNavigation(navLink);
       });
     });
+  }
 
-    // FAQ item interactions
-    this.elements.faqItems.forEach((item, index) => {
-      this.setupFAQItemEvents(item, index);
+  /**
+   * Setup question card handling
+   */
+  setupQuestionCardHandling() {
+    this.elements.questionCards.forEach((card, index) => {
+      // Add entrance animation
+      this.addEntranceAnimation(card, index);
+
+      // Click handler
+      card.addEventListener('click', (e) => {
+        this.handleQuestionCardClick(card, index);
+      });
+
+      // Hover effects
+      card.addEventListener('mouseenter', () => {
+        this.handleQuestionCardHover(card);
+      });
+
+      // Keyboard handling
+      card.setAttribute('tabindex', '0');
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.handleQuestionCardClick(card, index);
+        }
+      });
     });
+  }
 
-    // Story button events
+  /**
+   * Setup story button handling
+   */
+  setupStoryButtonHandling() {
     this.elements.storyButtons.forEach(button => {
       button.addEventListener('click', (e) => {
         this.handleStoryAction(e.target.dataset.action);
       });
     });
+  }
 
-    // Keyboard navigation
+  /**
+   * Setup keyboard handling
+   */
+  setupKeyboardHandling() {
     document.addEventListener('keydown', (e) => {
-      this.handleKeyboardNavigation(e);
+      // Search shortcuts
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        this.focusSearch();
+      }
+
+      if (e.key === 'Escape') {
+        this.handleEscapeKey();
+      }
+
+      // Arrow key navigation in search
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        this.handleArrowNavigation(e);
+      }
     });
   }
 
   /**
-   * Initialize core features
+   * Setup click outside handlers
    */
-  initializeFeatures() {
-    this.setupStickyHeader();
-    this.setupSmoothScrolling();
-    this.setupLoadingAnimation();
-    this.setupSearchFunctionality();
-    this.setupFAQEnhancements();
-    this.initAnalytics();
+  setupClickOutsideHandlers() {
+    document.addEventListener('click', (e) => {
+      // Close search results when clicking outside
+      if (!e.target.closest('.search-section')) {
+        this.hideSearchResults();
+      }
+    });
   }
 
   /**
@@ -152,63 +234,31 @@ class ClearCutParentingApp {
    */
   handleScroll() {
     const scrollY = window.scrollY;
-    const headerHeight = 120;
+    const threshold = 80;
 
-    // Update sticky header state
-    if (scrollY > headerHeight / 2 && !this.state.isScrolled) {
+    // Update header state
+    if (scrollY > threshold && !this.state.isScrolled) {
       this.state.isScrolled = true;
       this.elements.stickyHeader?.classList.add('scrolled');
-    } else if (scrollY <= headerHeight / 2 && this.state.isScrolled) {
+    } else if (scrollY <= threshold && this.state.isScrolled) {
       this.state.isScrolled = false;
       this.elements.stickyHeader?.classList.remove('scrolled');
     }
 
-    // Update active section based on scroll position
+    // Update active section
     this.updateActiveSection();
 
-    // Store last scroll position
     this.state.lastScrollY = scrollY;
   }
 
   /**
-   * Setup sticky header functionality
-   */
-  setupStickyHeader() {
-    if (!this.elements.stickyHeader) return;
-
-    // Initial setup
-    const headerHeight = this.elements.stickyHeader.offsetHeight;
-    document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
-
-    // Add smooth transitions
-    this.elements.stickyHeader.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-  }
-  setupSmoothScrolling() {
-    // Already using CSS: scroll-behavior: smooth;
-    // Keep this here to avoid runtime errors.
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', (e) => {
-        const id = a.getAttribute('href').slice(1);
-        const el = document.getElementById(id);
-        if (el) {
-          e.preventDefault();
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
-  }
-  /**
    * Handle search input
    */
-  handleSearch(query) {
-    // Clear previous timeout
-    if (this.state.searchTimeout) {
-      clearTimeout(this.state.searchTimeout);
-    }
+  handleSearchInput(query) {
+    clearTimeout(this.state.searchTimeout);
 
-    // Debounce search
     this.state.searchTimeout = setTimeout(() => {
-      if (query.trim().length > 2) {
+      if (query.trim().length > 1) {
         this.performSearch(query.trim());
       } else {
         this.hideSearchResults();
@@ -217,31 +267,58 @@ class ClearCutParentingApp {
   }
 
   /**
-   * Perform search with real-time highlighting
+   * Handle search keydown events
+   */
+  handleSearchKeydown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const query = e.target.value.trim();
+      if (query) {
+        this.executeSearch(query);
+      }
+    } else if (e.key === 'Escape') {
+      this.clearSearch();
+    }
+  }
+
+  /**
+   * Handle search focus
+   */
+  handleSearchFocus() {
+    const query = this.elements.searchInput.value.trim();
+    if (query.length > 1) {
+      this.performSearch(query);
+    }
+  }
+
+  /**
+   * Perform search with enhanced results
    */
   performSearch(query) {
+    if (this.state.isSearching) return;
+
+    this.state.isSearching = true;
     const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 1);
     const results = [];
 
-    // Search through FAQ items
-    this.elements.faqItems.forEach((item, index) => {
-      const text = item.textContent.toLowerCase();
-      const category = item.dataset.category || 'general';
+    // Search through question cards
+    this.elements.questionCards.forEach((card, index) => {
+      const text = card.textContent.toLowerCase();
+      const category = card.dataset.category || 'general';
       
-      // Check for matches
       const matches = searchTerms.filter(term => text.includes(term));
       
       if (matches.length > 0) {
-        const titleElement = item.querySelector('.faq-title');
-        const questionElement = item.querySelector('.faq-question');
+        const tagElement = card.querySelector('.question-tag');
+        const questionElement = card.querySelector('.question-text');
         
         results.push({
           index,
           category,
-          title: titleElement?.textContent || '',
+          tag: tagElement?.textContent || '',
           question: questionElement?.textContent || '',
           relevance: matches.length / searchTerms.length,
-          element: item
+          element: card
         });
       }
     });
@@ -249,22 +326,20 @@ class ClearCutParentingApp {
     // Sort by relevance
     results.sort((a, b) => b.relevance - a.relevance);
 
-    // Update search results
     this.displaySearchResults(results, query);
-    
-    // Highlight matching FAQ items
     this.highlightSearchMatches(results);
 
-    // Track search event
+    this.state.isSearching = false;
+
+    // Analytics
     this.trackEvent('search', {
       query,
-      results_count: results.length,
-      timestamp: new Date().toISOString()
+      results_count: results.length
     });
   }
 
   /**
-   * Display search results dropdown
+   * Display search results
    */
   displaySearchResults(results, query) {
     if (!this.elements.searchResults) return;
@@ -272,26 +347,26 @@ class ClearCutParentingApp {
     if (results.length === 0) {
       this.elements.searchResults.innerHTML = `
         <div class="search-result-item no-results">
-          <p>No results found for "${query}"</p>
-          <small>Try different keywords or browse categories above</small>
+          <p><strong>No results found for "${query}"</strong></p>
+          <small>Try different keywords or browse the categories above</small>
         </div>
       `;
     } else {
       const resultsHTML = results.slice(0, 5).map(result => `
         <div class="search-result-item" data-category="${result.category}" data-index="${result.index}">
-          <div class="result-category">${result.title}</div>
+          <div class="result-category">${result.tag}</div>
           <div class="result-question">${result.question}</div>
         </div>
       `).join('');
 
       this.elements.searchResults.innerHTML = resultsHTML;
 
-      // Add click events to results
+      // Add click events
       this.elements.searchResults.querySelectorAll('.search-result-item').forEach(item => {
         if (!item.classList.contains('no-results')) {
           item.addEventListener('click', () => {
             const index = parseInt(item.dataset.index);
-            this.scrollToFAQItem(index);
+            this.scrollToQuestionCard(index);
             this.hideSearchResults();
           });
         }
@@ -302,7 +377,7 @@ class ClearCutParentingApp {
   }
 
   /**
-   * Show search results dropdown
+   * Show search results
    */
   showSearchResults() {
     if (this.elements.searchResults) {
@@ -311,7 +386,7 @@ class ClearCutParentingApp {
   }
 
   /**
-   * Hide search results dropdown
+   * Hide search results
    */
   hideSearchResults() {
     if (this.elements.searchResults) {
@@ -320,149 +395,137 @@ class ClearCutParentingApp {
   }
 
   /**
-   * Highlight search matches in FAQ items
+   * Highlight search matches
    */
   highlightSearchMatches(results) {
-    // Reset all highlights
-    this.elements.faqItems.forEach(item => {
-      item.classList.remove('search-highlight');
-      item.style.transform = '';
-      item.style.boxShadow = '';
+    // Clear previous highlights
+    this.clearSearchHighlights();
+
+    // Add highlights with staggered animation
+    results.forEach((result, index) => {
+      setTimeout(() => {
+        result.element.style.transform = 'translateY(-4px) scale(1.02)';
+        result.element.style.boxShadow = '0 8px 25px rgba(45, 90, 39, 0.15)';
+        result.element.classList.add('search-highlight');
+      }, index * 100);
     });
 
-    // Highlight matches
-    results.forEach(result => {
-      result.element.classList.add('search-highlight');
-      result.element.style.transform = 'translateY(-3px) scale(1.02)';
-      result.element.style.boxShadow = '0 8px 32px rgba(0, 77, 64, 0.2)';
-    });
-
-    // Auto-remove highlights after delay
+    // Auto-clear highlights
     setTimeout(() => {
       this.clearSearchHighlights();
-    }, 5000);
+    }, 4000);
   }
 
   /**
    * Clear search highlights
    */
   clearSearchHighlights() {
-    this.elements.faqItems.forEach(item => {
-      item.classList.remove('search-highlight');
-      item.style.transform = '';
-      item.style.boxShadow = '';
+    this.elements.questionCards.forEach(card => {
+      card.style.transform = '';
+      card.style.boxShadow = '';
+      card.classList.remove('search-highlight');
     });
   }
 
   /**
-   * Setup FAQ item interactions
+   * Handle navigation clicks
    */
-  setupFAQItemEvents(item, index) {
-    // Add entrance animation
-    item.style.opacity = '0';
-    item.style.transform = 'translateY(30px)';
+  handleNavigation(navLink) {
+    const section = navLink.dataset.section;
     
-    // Animate in with delay
-    setTimeout(() => {
-      item.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-      item.style.opacity = '1';
-      item.style.transform = 'translateY(0)';
-    }, index * 150);
-
-    // Click handler
-    item.addEventListener('click', (e) => {
-      e.preventDefault();
-      this.handleFAQClick(item, index);
+    // Update active state
+    this.elements.navLinks.forEach(link => {
+      link.classList.remove('active');
+      link.removeAttribute('aria-current');
     });
-
-    // Enhanced hover effects
-    item.addEventListener('mouseenter', () => {
-      item.style.transform = 'translateY(-6px) scale(1.02)';
-      this.preloadFAQContent(item.dataset.category);
-    });
-
-    item.addEventListener('mouseleave', () => {
-      if (!item.classList.contains('search-highlight')) {
-        item.style.transform = 'translateY(0) scale(1)';
-      }
-    });
-
-    // Focus events for accessibility
-    item.addEventListener('focus', () => {
-      item.style.outline = '2px solid var(--primary-color)';
-      item.style.outlineOffset = '4px';
-    });
-
-    item.addEventListener('blur', () => {
-      item.style.outline = '';
-      item.style.outlineOffset = '';
-    });
+    
+    navLink.classList.add('active');
+    navLink.setAttribute('aria-current', 'page');
+    
+    this.state.activeSection = section;
+    this.scrollToSection(section);
+    
+    this.trackEvent('navigation', { section });
   }
 
   /**
-   * Handle FAQ item clicks
+   * Handle question card clicks
    */
-  handleFAQClick(item, index) {
-    const category = item.dataset.category;
+  handleQuestionCardClick(card, index) {
+    const category = card.dataset.category;
     
     // Add click animation
-    item.style.transform = 'scale(0.98)';
+    card.style.transform = 'scale(0.98)';
     setTimeout(() => {
-      item.style.transform = 'translateY(-6px) scale(1.02)';
+      card.style.transform = '';
     }, 150);
 
     // Show loading state
     this.showToast(`Loading ${category} guidance...`, 'info');
 
     // Track interaction
-    this.trackEvent('faq_click', {
-      category,
-      index,
-      timestamp: new Date().toISOString()
-    });
+    this.trackEvent('question_click', { category, index });
 
-    // Simulate content loading (in real app, this would fetch content)
+    // Simulate content loading
     setTimeout(() => {
-      this.showToast(`${category} content loaded successfully!`, 'success');
-    }, 1000);
+      this.showToast(`${category} content ready!`, 'success');
+    }, 800);
   }
 
   /**
-   * Handle navigation clicks
+   * Handle question card hover
    */
-  handleNavigation(navItem) {
-    const section = navItem.dataset.section;
-    
-    // Update active state
-    this.elements.navItems.forEach(item => {
-      item.classList.remove('active');
-      item.removeAttribute('aria-current');
-    });
-    
-    navItem.classList.add('active');
-    navItem.setAttribute('aria-current', 'page');
-    
-    // Update state
-    this.state.activeSection = section;
-    
-    // Smooth scroll to relevant FAQ section
-    this.scrollToSection(section);
-    
-    // Track navigation
-    this.trackEvent('navigation', {
-      section,
-      timestamp: new Date().toISOString()
-    });
+  handleQuestionCardHover(card) {
+    const category = card.dataset.category;
+    // Preload content logic here
+    this.preloadContent(category);
   }
 
   /**
-   * Scroll to specific section
+   * Handle story actions
+   */
+  handleStoryAction(action) {
+    switch (action) {
+      case 'read-more':
+        this.showToast('Opening full story...', 'info');
+        this.trackEvent('story_read_more');
+        setTimeout(() => {
+          this.showToast('Story loaded successfully!', 'success');
+        }, 600);
+        break;
+        
+      case 'share-story':
+        this.showToast('Opening story form...', 'info');
+        this.trackEvent('story_share');
+        setTimeout(() => {
+          this.showToast('Form ready for submission!', 'success');
+        }, 500);
+        break;
+    }
+  }
+
+  /**
+   * Add entrance animation to elements
+   */
+  addEntranceAnimation(element, index) {
+    element.style.opacity = '0';
+    element.style.transform = 'translateY(20px)';
+    
+    setTimeout(() => {
+      element.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      element.style.opacity = '1';
+      element.style.transform = 'translateY(0)';
+    }, index * 100 + 200);
+  }
+
+  /**
+   * Scroll to section
    */
   scrollToSection(section) {
     const faqSection = document.getElementById('faq-section');
     if (!faqSection) return;
 
-    const headerHeight = this.elements.stickyHeader?.offsetHeight || 120;
+    const headerHeight = this.elements.stickyHeader?.offsetHeight || 140;
     const targetPosition = faqSection.offsetTop - headerHeight - 20;
 
     window.scrollTo({
@@ -470,146 +533,253 @@ class ClearCutParentingApp {
       behavior: 'smooth'
     });
 
-    // Highlight relevant FAQ items
-    this.highlightSectionFAQs(section);
+    this.highlightSectionCards(section);
   }
 
   /**
-   * Scroll to specific FAQ item
+   * Scroll to specific question card
    */
-  scrollToFAQItem(index) {
-    const faqItem = this.elements.faqItems[index];
-    if (!faqItem) return;
+  scrollToQuestionCard(index) {
+    const card = this.elements.questionCards[index];
+    if (!card) return;
 
-    const headerHeight = this.elements.stickyHeader?.offsetHeight || 120;
-    const targetPosition = faqItem.offsetTop - headerHeight - 30;
+    const headerHeight = this.elements.stickyHeader?.offsetHeight || 140;
+    const targetPosition = card.offsetTop - headerHeight - 30;
 
     window.scrollTo({
       top: targetPosition,
       behavior: 'smooth'
     });
 
-    // Highlight the specific item
+    // Highlight the card
     setTimeout(() => {
-      faqItem.style.transform = 'translateY(-6px) scale(1.05)';
-      faqItem.style.boxShadow = '0 12px 40px rgba(0, 77, 64, 0.25)';
+      card.style.transform = 'translateY(-6px) scale(1.05)';
+      card.style.boxShadow = '0 12px 40px rgba(45, 90, 39, 0.2)';
       
       setTimeout(() => {
-        faqItem.style.transform = 'translateY(0) scale(1)';
-        faqItem.style.boxShadow = '';
+        card.style.transform = '';
+        card.style.boxShadow = '';
       }, 2000);
     }, 500);
   }
 
   /**
-   * Highlight FAQ items for specific section
+   * Highlight cards for specific section
    */
-  highlightSectionFAQs(section) {
-    this.elements.faqItems.forEach(item => {
-      if (item.dataset.category === section) {
-        item.style.transform = 'translateY(-4px) scale(1.02)';
-        item.style.boxShadow = '0 8px 24px rgba(0, 77, 64, 0.15)';
+  highlightSectionCards(section) {
+    this.elements.questionCards.forEach(card => {
+      if (card.dataset.category === section) {
+        card.style.transform = 'translateY(-3px) scale(1.02)';
+        card.style.boxShadow = '0 8px 25px rgba(45, 90, 39, 0.15)';
       } else {
-        item.style.transform = 'translateY(0) scale(1)';
-        item.style.boxShadow = '';
+        card.style.transform = '';
+        card.style.boxShadow = '';
       }
     });
 
-    // Clear highlights after delay
+    // Clear highlights
     setTimeout(() => {
-      this.elements.faqItems.forEach(item => {
-        item.style.transform = 'translateY(0) scale(1)';
-        item.style.boxShadow = '';
+      this.elements.questionCards.forEach(card => {
+        card.style.transform = '';
+        card.style.boxShadow = '';
       });
     }, 3000);
   }
 
   /**
-   * Handle story button actions
+   * Update active section based on scroll
    */
-  handleStoryAction(action) {
-    switch (action) {
-      case 'read-more':
-        this.showToast('Loading full story...', 'info');
-        this.trackEvent('story_read_more', { timestamp: new Date().toISOString() });
-        // In real app, this would open modal or navigate to full story
-        setTimeout(() => {
-          this.showToast('Story loaded! (Demo mode)', 'success');
-        }, 1000);
-        break;
-        
-      case 'share-story':
-        this.showToast('Opening story submission form...', 'info');
-        this.trackEvent('story_share', { timestamp: new Date().toISOString() });
-        // In real app, this would open submission form
-        setTimeout(() => {
-          this.showToast('Form ready! (Demo mode)', 'success');
-        }, 800);
-        break;
+  updateActiveSection() {
+    const cards = this.elements.questionCards;
+    const scrollY = window.scrollY;
+    const headerHeight = this.elements.stickyHeader?.offsetHeight || 140;
+
+    let activeCategory = this.state.activeSection;
+
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      const cardTop = rect.top + scrollY - headerHeight - 100;
+      const cardBottom = cardTop + rect.height;
+
+      if (scrollY >= cardTop && scrollY < cardBottom) {
+        activeCategory = card.dataset.category;
+      }
+    });
+
+    if (activeCategory !== this.state.activeSection) {
+      this.state.activeSection = activeCategory;
+      this.updateNavigationState(activeCategory);
     }
   }
 
   /**
-   * Setup loading animation
+   * Update navigation state
    */
-  setupLoadingAnimation() {
-    if (!this.elements.loadingOverlay) return;
-
-    // Simulate loading time with progressive updates
-    const loadingSteps = [
-      { delay: 300, text: 'Initializing components...' },
-      { delay: 600, text: 'Loading parenting resources...' },
-      { delay: 900, text: 'Optimizing experience...' }
-    ];
-
-    loadingSteps.forEach(step => {
-      setTimeout(() => {
-        const textElement = this.elements.loadingOverlay.querySelector('.loading-text');
-        if (textElement) {
-          textElement.textContent = step.text;
-        }
-      }, step.delay);
+  updateNavigationState(activeCategory) {
+    this.elements.navLinks.forEach(navLink => {
+      if (navLink.dataset.section === activeCategory) {
+        navLink.classList.add('active');
+        navLink.setAttribute('aria-current', 'page');
+      } else {
+        navLink.classList.remove('active');
+        navLink.removeAttribute('aria-current');
+      }
     });
-
-    // Hide loading overlay
-    setTimeout(() => {
-      this.elements.loadingOverlay.classList.add('fade-out');
-      setTimeout(() => {
-        if (this.elements.loadingOverlay.parentNode) {
-          this.elements.loadingOverlay.parentNode.removeChild(this.elements.loadingOverlay);
-        }
-      }, 500);
-    }, 1200);
   }
-  safeHideOverlay() {
-    try {
-      const overlay = document.getElementById('loadingOverlay');
-      if (!overlay) return;
-      overlay.classList.add('fade-out');
-      setTimeout(() => {
-        if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-      }, 500);
-    } catch (e) {
-      // last-ditch: force-remove
-      const overlay = document.getElementById('loadingOverlay');
-      if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+
+  /**
+   * Focus search input
+   */
+  focusSearch() {
+    if (this.elements.searchInput) {
+      this.elements.searchInput.focus();
+      this.elements.searchInput.select();
     }
+  }
+
+  /**
+   * Handle escape key
+   */
+  handleEscapeKey() {
+    this.clearSearch();
+    document.activeElement?.blur();
+    this.hideSearchResults();
+  }
+
+  /**
+   * Handle arrow key navigation
+   */
+  handleArrowNavigation(e) {
+    const searchResults = document.querySelectorAll('.search-result-item:not(.no-results)');
+    if (searchResults.length === 0) return;
+
+    const currentFocus = document.activeElement;
+    let currentIndex = Array.from(searchResults).indexOf(currentFocus);
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      currentIndex = (currentIndex + 1) % searchResults.length;
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      currentIndex = currentIndex <= 0 ? searchResults.length - 1 : currentIndex - 1;
+    }
+
+    searchResults[currentIndex].focus();
+  }
+
+  /**
+   * Clear search
+   */
+  clearSearch() {
+    if (this.elements.searchInput) {
+      this.elements.searchInput.value = '';
+    }
+    this.hideSearchResults();
+    this.clearSearchHighlights();
+  }
+
+  /**
+   * Execute search (on Enter)
+   */
+  executeSearch(query) {
+    this.performSearch(query);
+    this.showToast(`Searching for: "${query}"`, 'info');
+    this.trackEvent('search_execute', { query });
+  }
+
+  /**
+   * Handle page resize
+   */
+  handleResize() {
+    const windowWidth = window.innerWidth;
+    
+    // Update mobile state
+    document.body.classList.toggle('mobile-view', windowWidth < 768);
+
+    // Hide search results on resize
+    this.hideSearchResults();
+
+    // Update header height
+    if (this.elements.stickyHeader) {
+      const headerHeight = this.elements.stickyHeader.offsetHeight;
+      document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+    }
+  }
+
+  /**
+   * Handle page load
+   */
+  handlePageLoad() {
+    document.body.classList.add('loaded');
+    this.trackEvent('page_load', {
+      load_time: performance.now(),
+      viewport: `${window.innerWidth}x${window.innerHeight}`
+    });
+  }
+
+  /**
+   * Handle initialization error
+   */
+  handleInitError() {
+    // Fallback: ensure loading overlay is removed
+    setTimeout(() => {
+      const overlay = document.getElementById('loadingOverlay');
+      if (overlay) overlay.remove();
+    }, 1000);
+
+    this.showToast('App initialization completed with warnings', 'warning');
+  }
+
+  /**
+   * Initialize features
+   */
+  initializeFeatures() {
+    this.setupStickyHeader();
+    this.setupLazyLoading();
+    this.setupSmoothScrolling();
+    this.initAnalytics();
+  }
+
+  /**
+   * Setup sticky header
+   */
+  setupStickyHeader() {
+    if (!this.elements.stickyHeader) return;
+
+    const headerHeight = this.elements.stickyHeader.offsetHeight;
+    document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+  }
+
+  /**
+   * Setup smooth scrolling for anchor links
+   */
+  setupSmoothScrolling() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        const targetId = anchor.getAttribute('href').slice(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          e.preventDefault();
+          const headerHeight = this.elements.stickyHeader?.offsetHeight || 140;
+          const targetPosition = targetElement.offsetTop - headerHeight;
+          
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
   }
 
   /**
    * Setup performance optimizations
    */
   setupPerformanceOptimizations() {
-    // Lazy loading for images
     this.setupLazyLoading();
-    
-    // Intersection observers
     this.setupIntersectionObservers();
-    
-    // Preload critical resources
     this.preloadCriticalResources();
-    
-    // Memory management
     this.setupMemoryManagement();
   }
 
@@ -639,7 +809,7 @@ class ClearCutParentingApp {
   }
 
   /**
-   * Setup intersection observers for animations
+   * Setup intersection observers
    */
   setupIntersectionObservers() {
     if ('IntersectionObserver' in window) {
@@ -652,9 +822,9 @@ class ClearCutParentingApp {
         });
       }, { threshold: 0.2 });
 
-      // Observe FAQ items for entrance animations
-      this.elements.faqItems.forEach(item => {
-        this.observers.animationObserver.observe(item);
+      // Observe question cards for entrance animations
+      this.elements.questionCards.forEach(card => {
+        this.observers.animationObserver.observe(card);
       });
     }
   }
@@ -663,24 +833,25 @@ class ClearCutParentingApp {
    * Preload critical resources
    */
   preloadCriticalResources() {
-    const criticalResources = [
-      { rel: 'preload', as: 'font', href: 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap' },
-      { rel: 'preload', as: 'font', href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap' }
+    const criticalFonts = [
+      'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
+      'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap'
     ];
 
-    criticalResources.forEach(resource => {
+    criticalFonts.forEach(fontUrl => {
       const link = document.createElement('link');
-      Object.assign(link, resource);
+      link.rel = 'preload';
+      link.as = 'style';
+      link.href = fontUrl;
       link.crossOrigin = 'anonymous';
       document.head.appendChild(link);
     });
   }
 
   /**
-   * Preload FAQ content based on category
+   * Preload content
    */
-  preloadFAQContent(category) {
-    // Simulate content preloading
+  preloadContent(category) {
     if (!this.state.preloadedContent) {
       this.state.preloadedContent = new Set();
     }
@@ -695,15 +866,14 @@ class ClearCutParentingApp {
    * Setup memory management
    */
   setupMemoryManagement() {
-    // Cleanup on page unload
     window.addEventListener('beforeunload', () => {
       this.cleanup();
     });
 
-    // Periodic cleanup
+    // Periodic cleanup every 5 minutes
     setInterval(() => {
       this.performPeriodicCleanup();
-    }, 300000); // Every 5 minutes
+    }, 300000);
   }
 
   /**
@@ -724,31 +894,29 @@ class ClearCutParentingApp {
       </div>
     `;
 
-    // Add to container
     this.elements.toastContainer.appendChild(toast);
 
-    // Close button functionality
+    // Close button
     const closeBtn = toast.querySelector('.toast-close');
     closeBtn.addEventListener('click', () => {
       this.hideToast(toast);
     });
 
     // Show animation
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       toast.classList.add('show');
-    }, 100);
+    });
 
     // Auto-hide
     const hideTimeout = setTimeout(() => {
       this.hideToast(toast);
     }, duration || this.config.toastDuration);
 
-    // Store timeout reference for potential cancellation
     toast.hideTimeout = hideTimeout;
   }
 
   /**
-   * Get appropriate icon for toast type
+   * Get toast icon
    */
   getToastIcon(type) {
     const icons = {
@@ -761,7 +929,7 @@ class ClearCutParentingApp {
   }
 
   /**
-   * Hide toast notification
+   * Hide toast
    */
   hideToast(toast) {
     if (toast.hideTimeout) {
@@ -777,163 +945,20 @@ class ClearCutParentingApp {
   }
 
   /**
-   * Handle keyboard navigation
-   */
-  handleKeyboardNavigation(e) {
-    // Handle keyboard shortcuts
-    if (e.ctrlKey || e.metaKey) {
-      switch (e.key) {
-        case 'k':
-          e.preventDefault();
-          this.elements.searchInput?.focus();
-          break;
-        case '/':
-          e.preventDefault();
-          this.elements.searchInput?.focus();
-          break;
-      }
-    }
-
-    // Handle escape key
-    if (e.key === 'Escape') {
-      this.clearSearch();
-      document.activeElement?.blur();
-    }
-
-    // Handle arrow keys for navigation
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      this.handleArrowKeyNavigation(e);
-    }
-  }
-
-  /**
-   * Handle arrow key navigation in search results
-   */
-  handleArrowKeyNavigation(e) {
-    const searchResults = document.querySelectorAll('.search-result-item:not(.no-results)');
-    if (searchResults.length === 0) return;
-
-    const currentFocus = document.activeElement;
-    let currentIndex = Array.from(searchResults).indexOf(currentFocus);
-
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      currentIndex = (currentIndex + 1) % searchResults.length;
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      currentIndex = currentIndex <= 0 ? searchResults.length - 1 : currentIndex - 1;
-    }
-
-    searchResults[currentIndex].focus();
-  }
-
-  /**
-   * Clear search functionality
-   */
-  clearSearch() {
-    if (this.elements.searchInput) {
-      this.elements.searchInput.value = '';
-    }
-    this.hideSearchResults();
-    this.clearSearchHighlights();
-  }
-
-  /**
-   * Update active section based on scroll position
-   */
-  updateActiveSection() {
-    const faqItems = this.elements.faqItems;
-    const scrollY = window.scrollY;
-    const headerHeight = this.elements.stickyHeader?.offsetHeight || 120;
-
-    let activeCategory = this.state.activeSection;
-
-    faqItems.forEach(item => {
-      const rect = item.getBoundingClientRect();
-      const itemTop = rect.top + scrollY - headerHeight - 100;
-      const itemBottom = itemTop + rect.height;
-
-      if (scrollY >= itemTop && scrollY < itemBottom) {
-        activeCategory = item.dataset.category;
-      }
-    });
-
-    // Update navigation if changed
-    if (activeCategory !== this.state.activeSection) {
-      this.state.activeSection = activeCategory;
-      this.updateNavigationState(activeCategory);
-    }
-  }
-
-  /**
-   * Update navigation state
-   */
-  updateNavigationState(activeCategory) {
-    this.elements.navItems.forEach(navItem => {
-      if (navItem.dataset.section === activeCategory) {
-        navItem.classList.add('active');
-        navItem.setAttribute('aria-current', 'page');
-      } else {
-        navItem.classList.remove('active');
-        navItem.removeAttribute('aria-current');
-      }
-    });
-  }
-
-  /**
-   * Handle page resize
-   */
-  handleResize() {
-    const windowWidth = window.innerWidth;
-    
-    // Update mobile state
-    if (windowWidth < 768) {
-      document.body.classList.add('mobile-view');
-    } else {
-      document.body.classList.remove('mobile-view');
-    }
-
-    // Update header height variable
-    if (this.elements.stickyHeader) {
-      const headerHeight = this.elements.stickyHeader.offsetHeight;
-      document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
-    }
-
-    // Hide search results on resize
-    this.hideSearchResults();
-  }
-
-  /**
-   * Handle page load completion
-   */
-  handlePageLoad() {
-    document.body.classList.add('loaded');
-    this.initAnalytics();
-    this.trackEvent('page_load', {
-      timestamp: new Date().toISOString(),
-      load_time: performance.now()
-    });
-  }
-
-  /**
-   * Initialize accessibility features
+   * Initialize accessibility
    */
   initAccessibility() {
-    // Add keyboard navigation hints
+    // Add search hint
     if (this.elements.searchInput) {
-      this.elements.searchInput.setAttribute('aria-describedby', 'search-hint');
-      
       const searchHint = document.createElement('div');
       searchHint.id = 'search-hint';
       searchHint.className = 'sr-only';
-      searchHint.textContent = 'Use Ctrl+K or Cmd+K to focus search. Press Escape to clear.';
+      searchHint.textContent = 'Use Ctrl+K to focus search. Press Escape to clear.';
       this.elements.searchInput.parentNode.appendChild(searchHint);
+      this.elements.searchInput.setAttribute('aria-describedby', 'search-hint');
     }
 
-    // Enhanced focus management
     this.setupFocusManagement();
-    
-    // Screen reader announcements
     this.setupScreenReaderSupport();
   }
 
@@ -947,7 +972,6 @@ class ClearCutParentingApp {
       lastFocusedElement = e.target;
     });
 
-    // Trap focus in modals/dialogs when they exist
     this.lastFocusedElement = lastFocusedElement;
   }
 
@@ -955,8 +979,7 @@ class ClearCutParentingApp {
    * Setup screen reader support
    */
   setupScreenReaderSupport() {
-    // Announce dynamic content changes
-    const announceChange = (message) => {
+    this.announceChange = (message) => {
       const announcement = document.createElement('div');
       announcement.setAttribute('aria-live', 'polite');
       announcement.setAttribute('aria-atomic', 'true');
@@ -969,19 +992,14 @@ class ClearCutParentingApp {
         document.body.removeChild(announcement);
       }, 1000);
     };
-
-    // Store for use in other methods
-    this.announceChange = announceChange;
   }
 
   /**
    * Initialize analytics
    */
   initAnalytics() {
-    // Initialize analytics (placeholder for real implementation)
     console.log('📊 Analytics initialized');
     
-    // Track initial page view
     this.trackEvent('page_view', {
       page: 'home',
       user_agent: navigator.userAgent,
@@ -991,26 +1009,26 @@ class ClearCutParentingApp {
   }
 
   /**
-   * Track events for analytics
+   * Track events
    */
   trackEvent(eventName, data = {}) {
-    // Analytics tracking (placeholder for real implementation)
     const eventData = {
       event: eventName,
       ...data,
       session_id: this.getSessionId(),
-      page_url: window.location.href
+      page_url: window.location.href,
+      timestamp: new Date().toISOString()
     };
 
-    console.log(`📈 Event tracked: ${eventName}`, eventData);
-
-    // In production, send to analytics service
-    // Example: gtag('event', eventName, data);
-    // Example: analytics.track(eventName, data);
+    console.log(`📈 Event: ${eventName}`, eventData);
+    
+    // In production: send to analytics service
+    // gtag('event', eventName, data);
+    // analytics.track(eventName, data);
   }
 
   /**
-   * Get or create session ID
+   * Get session ID
    */
   getSessionId() {
     let sessionId = sessionStorage.getItem('cc_session_id');
@@ -1025,10 +1043,8 @@ class ClearCutParentingApp {
    * Perform periodic cleanup
    */
   performPeriodicCleanup() {
-    // Clear old search highlights
     this.clearSearchHighlights();
     
-    // Clean up old toast notifications
     const oldToasts = this.elements.toastContainer?.querySelectorAll('.toast:not(.show)');
     oldToasts?.forEach(toast => {
       if (toast.parentNode) {
@@ -1043,27 +1059,21 @@ class ClearCutParentingApp {
    * Cleanup resources
    */
   cleanup() {
-    // Clear timeouts
     if (this.state.searchTimeout) {
       clearTimeout(this.state.searchTimeout);
     }
 
-    // Disconnect observers
     Object.values(this.observers).forEach(observer => {
       if (observer && observer.disconnect) {
         observer.disconnect();
       }
     });
 
-    // Remove event listeners
-    window.removeEventListener('scroll', this.handleScroll);
-    window.removeEventListener('resize', this.handleResize);
-
-    console.log('🧽 Application cleanup completed');
+    console.log('🧽 App cleanup completed');
   }
 
   /**
-   * Utility: Throttle function
+   * Throttle utility
    */
   throttle(func, limit) {
     let inThrottle;
@@ -1077,7 +1087,7 @@ class ClearCutParentingApp {
   }
 
   /**
-   * Utility: Debounce function
+   * Debounce utility
    */
   debounce(func, wait, immediate = false) {
     let timeout;
@@ -1092,142 +1102,81 @@ class ClearCutParentingApp {
       if (callNow) func.apply(this, args);
     };
   }
-
-  /**
-   * Execute search (when Enter is pressed)
-   */
-  executeSearch(query) {
-    if (!query.trim()) return;
-
-    this.performSearch(query);
-    this.showToast(`Searching for: "${query}"`, 'info');
-    
-    // Track search execution
-    this.trackEvent('search_execute', {
-      query: query.trim(),
-      timestamp: new Date().toISOString()
-    });
-  }
 }
 
-// Additional CSS for search results and toast notifications
-const additionalStyles = `
-  .search-results {
-    background: white;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-medium);
-    max-height: 300px;
-    overflow-y: auto;
-    z-index: 1001;
-  }
-
-  .search-result-item {
-    padding: 12px 16px;
-    border-bottom: 1px solid #f0f0f0;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  .search-result-item:last-child {
-    border-bottom: none;
-  }
-
-  .search-result-item:hover {
-    background: var(--secondary-bg);
-  }
-
-  .search-result-item.no-results {
-    cursor: default;
-    color: var(--text-muted);
-    text-align: center;
-    padding: 20px;
-  }
-
-  .result-category {
-    font-weight: 600;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-    margin-bottom: 4px;
-  }
-
-  .result-question {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    line-height: 1.4;
-  }
-
-  .toast-content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .toast-icon {
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  .toast-message {
-    flex: 1;
-  }
-
-  .toast-close {
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-    color: var(--text-muted);
-    padding: 0;
-    margin-left: 8px;
-    transition: color 0.2s ease;
-  }
-
-  .toast-close:hover {
-    color: var(--text-primary);
-  }
-
+// Enhanced styles for the minimalist design
+const enhancedStyles = `
   .search-highlight {
-    animation: pulse 2s ease-in-out;
+    animation: gentlePulse 2s ease-in-out;
   }
 
-  @keyframes pulse {
+  @keyframes gentlePulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
+    50% { opacity: 0.9; }
   }
 
   .loaded {
     animation: fadeInUp 0.8s ease;
   }
 
+  .question-card {
+    transform-origin: center center;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .question-card:hover {
+    transform: translateY(-2px) translateZ(0);
+  }
+
   @media (max-width: 768px) {
     .search-results {
       position: fixed;
-      top: var(--header-height);
-      left: 5%;
-      right: 5%;
+      top: 180px;
+      left: 16px;
+      right: 16px;
       max-height: 50vh;
+    }
+    
+    .toast-container {
+      top: 200px;
+      right: 16px;
+      left: 16px;
+    }
+    
+    .toast {
+      max-width: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .question-card,
+    .nav-link,
+    .story-btn {
+      transition: none !important;
+    }
+    
+    .question-card:hover {
+      transform: none !important;
     }
   }
 `;
 
-// Inject additional styles
+// Inject enhanced styles
 const styleSheet = document.createElement('style');
-styleSheet.textContent = additionalStyles;
+styleSheet.textContent = enhancedStyles;
 document.head.appendChild(styleSheet);
 
-// Initialize the application when DOM is ready
+// Initialize the app
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    window.clearCutParentingApp = new ClearCutParentingApp();
+    window.minimalistParentingApp = new MinimalistParentingApp();
   });
 } else {
-  window.clearCutParentingApp = new ClearCutParentingApp();
+  window.minimalistParentingApp = new MinimalistParentingApp();
 }
 
 // Export for potential module use
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = ClearCutParentingApp;
+  module.exports = MinimalistParentingApp;
 }

@@ -463,7 +463,7 @@ function generateOfflineFallback() {
         
         body {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+          background: #ffffff;
           min-height: 100vh;
           display: flex;
           align-items: center;
