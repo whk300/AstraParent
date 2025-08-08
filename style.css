@@ -1081,3 +1081,6 @@ h1, h2, h3 {
 
 .hidden { display: none; }
 .visible { display: block; }
+.site-title {
+  font-weight: 800 !important; /* ultra bold */
+}
