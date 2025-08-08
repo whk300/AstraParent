@@ -1,9 +1,10 @@
 /**
- * Optimized Service Worker for ClearCutParenting Minimalist PWA
- * Enhanced performance, caching, and offline functionality
+ * Minimalist Service Worker for ClearCutParenting PWA
+ * Optimized for performance and reliability
+ * Version: 3.0.0 - Minimalist Design Update
  */
 
-const CACHE_VERSION = 'v2.0.0';
+const CACHE_VERSION = 'v3.0.0';
 const CACHE_NAME = `clearcutparenting-${CACHE_VERSION}`;
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
@@ -29,21 +30,34 @@ const IMAGE_ASSETS = [
   '/images/Late Teens with books and bag.avif'
 ];
 
-// External resources
+// External resources - Updated for minimalist design
 const EXTERNAL_RESOURCES = [
-  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
-  'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap'
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+  'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap'
 ];
 
-// File extensions for different caching strategies
-const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.svg'];
-const FONT_EXTENSIONS = ['.woff', '.woff2', '.ttf', '.otf'];
+// Cache strategies
+const CACHE_STRATEGIES = {
+  cacheFirst: [
+    /\.(?:css|js|woff2?|ttf|otf)$/,
+    /fonts\.googleapis\.com/,
+    /fonts\.gstatic\.com/
+  ],
+  networkFirst: [
+    /\/api\//,
+    /\/manifest\.json$/
+  ],
+  staleWhileRevalidate: [
+    /\.(?:jpg|jpeg|png|gif|webp|avif|svg)$/,
+    /cdn-icons-png\.flaticon\.com/
+  ]
+};
 
 /**
  * Install Event - Cache critical assets
  */
 self.addEventListener('install', (event) => {
-  console.log('🚀 SW: Installing...');
+  console.log('🚀 SW v3.0.0: Installing minimalist version...');
   
   event.waitUntil(
     Promise.all([
@@ -60,6 +74,53 @@ self.addEventListener('install', (event) => {
 });
 
 /**
+ * Activate Event - Clean up old caches
+ */
+self.addEventListener('activate', (event) => {
+  console.log('🔄 SW v3.0.0: Activating minimalist version...');
+  
+  event.waitUntil(
+    cleanupOldCaches()
+      .then(() => self.clients.claim())
+      .then(() => {
+        console.log('✅ SW: Activated and claimed clients');
+        // Notify all clients about the update
+        return notifyClients('SW_UPDATED', { version: CACHE_VERSION });
+      })
+      .catch(error => {
+        console.error('❌ SW: Activation failed:', error);
+      })
+  );
+});
+
+/**
+ * Fetch Event - Optimized request handling
+ */
+self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  
+  // Skip non-GET requests
+  if (request.method !== 'GET') return;
+  
+  // Skip chrome-extension and other non-http requests
+  if (!request.url.startsWith('http')) return;
+
+  // Determine caching strategy
+  const url = new URL(request.url);
+  
+  // Use appropriate strategy based on request type
+  if (isStaticAsset(request)) {
+    event.respondWith(cacheFirstStrategy(request));
+  } else if (isImageRequest(request)) {
+    event.respondWith(staleWhileRevalidateStrategy(request));
+  } else if (isAPIRequest(request)) {
+    event.respondWith(networkFirstStrategy(request));
+  } else {
+    event.respondWith(networkFirstStrategy(request));
+  }
+});
+
+/**
  * Cache static assets
  */
 async function cacheStaticAssets() {
@@ -67,39 +128,48 @@ async function cacheStaticAssets() {
     const cache = await caches.open(STATIC_CACHE);
     const cachePromises = CRITICAL_ASSETS.map(async (asset) => {
       try {
-        await cache.add(asset);
-        console.log(`📦 SW: Cached static asset: ${asset}`);
+        const response = await fetch(asset, { cache: 'no-cache' });
+        if (response.ok) {
+          await cache.put(asset, response);
+          console.log(`📦 Cached: ${asset}`);
+        }
       } catch (error) {
-        console.warn(`⚠️ SW: Failed to cache ${asset}:`, error);
+        console.warn(`⚠️ Failed to cache ${asset}:`, error);
       }
     });
     
     await Promise.allSettled(cachePromises);
-    console.log('✅ SW: Static assets cached');
+    console.log('✅ Static assets cached');
   } catch (error) {
-    console.error('❌ SW: Static asset caching failed:', error);
+    console.error('❌ Static caching failed:', error);
   }
 }
 
 /**
- * Cache images with error handling
+ * Cache images with optimization
  */
 async function cacheImages() {
   try {
     const cache = await caches.open(IMAGE_CACHE);
     const imagePromises = IMAGE_ASSETS.map(async (image) => {
       try {
-        await cache.add(image);
-        console.log(`🖼️ SW: Cached image: ${image}`);
+        const response = await fetch(image, { 
+          cache: 'no-cache',
+          mode: 'cors'
+        });
+        if (response.ok) {
+          await cache.put(image, response);
+          console.log(`🖼️ Cached: ${image}`);
+        }
       } catch (error) {
-        console.warn(`⚠️ SW: Failed to cache image ${image}:`, error);
+        console.warn(`⚠️ Failed to cache image ${image}:`, error);
       }
     });
     
     await Promise.allSettled(imagePromises);
-    console.log('✅ SW: Images cached');
+    console.log('✅ Images cached');
   } catch (error) {
-    console.error('❌ SW: Image caching failed:', error);
+    console.error('❌ Image caching failed:', error);
   }
 }
 
@@ -111,37 +181,25 @@ async function cacheExternalResources() {
     const cache = await caches.open(STATIC_CACHE);
     const externalPromises = EXTERNAL_RESOURCES.map(async (resource) => {
       try {
-        await cache.add(resource);
-        console.log(`🌐 SW: Cached external resource: ${resource}`);
+        const response = await fetch(resource, {
+          mode: 'cors',
+          credentials: 'omit'
+        });
+        if (response.ok) {
+          await cache.put(resource, response);
+          console.log(`🌐 Cached: ${resource}`);
+        }
       } catch (error) {
-        console.warn(`⚠️ SW: Failed to cache external ${resource}:`, error);
+        console.warn(`⚠️ Failed to cache ${resource}:`, error);
       }
     });
     
     await Promise.allSettled(externalPromises);
-    console.log('✅ SW: External resources cached');
+    console.log('✅ External resources cached');
   } catch (error) {
-    console.error('❌ SW: External resource caching failed:', error);
+    console.error('❌ External caching failed:', error);
   }
 }
-
-/**
- * Activate Event - Clean up old caches
- */
-self.addEventListener('activate', (event) => {
-  console.log('🔄 SW: Activating...');
-  
-  event.waitUntil(
-    cleanupOldCaches()
-      .then(() => self.clients.claim())
-      .then(() => {
-        console.log('✅ SW: Activated and claimed clients');
-      })
-      .catch(error => {
-        console.error('❌ SW: Activation failed:', error);
-      })
-  );
-});
 
 /**
  * Clean up old cache versions
@@ -154,298 +212,137 @@ async function cleanupOldCaches() {
     const deletePromises = cacheNames
       .filter(cacheName => !currentCaches.includes(cacheName))
       .map(async (cacheName) => {
-        console.log(`🗑️ SW: Deleting old cache: ${cacheName}`);
+        console.log(`🗑️ Deleting old cache: ${cacheName}`);
         return caches.delete(cacheName);
       });
     
     await Promise.all(deletePromises);
-    console.log('✅ SW: Cache cleanup completed');
+    console.log('✅ Cache cleanup completed');
   } catch (error) {
-    console.error('❌ SW: Cache cleanup failed:', error);
+    console.error('❌ Cache cleanup failed:', error);
   }
 }
 
 /**
- * Fetch Event - Handle requests with optimized strategies
+ * Cache First Strategy - For static assets
  */
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  
-  // Only handle GET requests
-  if (request.method !== 'GET') return;
-  
-  // Skip chrome-extension and other non-http requests
-  if (!request.url.startsWith('http')) return;
-
-  // Route to appropriate handler
-  if (isImageRequest(request)) {
-    event.respondWith(handleImageRequest(request));
-  } else if (isFontRequest(request)) {
-    event.respondWith(handleFontRequest(request));
-  } else if (isStaticAsset(request)) {
-    event.respondWith(handleStaticRequest(request));
-  } else if (isAPIRequest(request)) {
-    event.respondWith(handleAPIRequest(request));
-  } else {
-    event.respondWith(handleDocumentRequest(request));
-  }
-});
-
-/**
- * Handle image requests - Cache First with optimized fallback
- */
-async function handleImageRequest(request) {
-  try {
-    const cache = await caches.open(IMAGE_CACHE);
-    let cachedResponse = await cache.match(request);
-
-    if (cachedResponse) {
-      // Update cache in background if older than 7 days
-      updateCacheInBackground(request, cache, 7 * 24 * 60 * 60 * 1000);
-      return cachedResponse;
-    }
-
-    console.log(`🖼️ SW: Fetching image: ${request.url}`);
-    const fetchResponse = await fetch(request, {
-      mode: 'cors',
-      credentials: 'omit'
-    });
-    
-    if (fetchResponse.ok) {
-      // Clone for caching
-      const responseToCache = fetchResponse.clone();
-      await cache.put(request, responseToCache);
-      console.log(`✅ SW: Image cached: ${request.url}`);
-    }
-
-    return fetchResponse;
-  } catch (error) {
-    console.error(`❌ SW: Image request failed: ${request.url}`, error);
-    return generateImageFallback(request.url);
-  }
-}
-
-/**
- * Handle font requests - Cache First with long TTL
- */
-async function handleFontRequest(request) {
+async function cacheFirstStrategy(request) {
   try {
     const cache = await caches.open(STATIC_CACHE);
     const cachedResponse = await cache.match(request);
-
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    console.log(`🔤 SW: Fetching font: ${request.url}`);
-    const fetchResponse = await fetch(request, {
-      mode: 'cors',
-      credentials: 'omit'
-    });
     
-    if (fetchResponse.ok) {
-      const responseToCache = fetchResponse.clone();
-      await cache.put(request, responseToCache);
-      console.log(`✅ SW: Font cached: ${request.url}`);
-    }
-
-    return fetchResponse;
-  } catch (error) {
-    console.error(`❌ SW: Font request failed: ${request.url}`, error);
-    // Fonts fail silently - browser will use fallback
-    return new Response('', { status: 404 });
-  }
-}
-
-/**
- * Handle static asset requests - Cache First
- */
-async function handleStaticRequest(request) {
-  try {
-    const cache = await caches.open(STATIC_CACHE);
-    const cachedResponse = await cache.match(request);
-
     if (cachedResponse) {
-      // Update cache in background for CSS/JS files
+      // Update cache in background for CSS/JS
       if (request.url.includes('.css') || request.url.includes('.js')) {
-        updateCacheInBackground(request, cache, 24 * 60 * 60 * 1000); // 24 hours
+        updateCacheInBackground(request, cache);
       }
       return cachedResponse;
     }
-
-    console.log(`📄 SW: Fetching static asset: ${request.url}`);
-    const fetchResponse = await fetch(request);
     
-    if (fetchResponse.ok) {
-      const responseToCache = fetchResponse.clone();
-      await cache.put(request, responseToCache);
-      console.log(`✅ SW: Static asset cached: ${request.url}`);
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      cache.put(request, networkResponse.clone());
     }
-
-    return fetchResponse;
+    return networkResponse;
   } catch (error) {
-    console.error(`❌ SW: Static request failed: ${request.url}`, error);
+    console.error('Cache first strategy failed:', error);
     return generateOfflineFallback();
   }
 }
 
 /**
- * Handle API requests - Network First with cache fallback
+ * Network First Strategy - For dynamic content
  */
-async function handleAPIRequest(request) {
+async function networkFirstStrategy(request) {
   try {
-    console.log(`🌐 SW: API request: ${request.url}`);
-    
-    // Try network first
-    const fetchResponse = await fetch(request, {
-      headers: {
-        'Cache-Control': 'no-cache'
-      }
+    const networkResponse = await fetch(request, {
+      cache: 'no-cache'
     });
     
-    if (fetchResponse.ok) {
-      // Cache successful responses
+    if (networkResponse.ok) {
       const cache = await caches.open(DYNAMIC_CACHE);
-      const responseToCache = fetchResponse.clone();
-      await cache.put(request, responseToCache);
-      console.log(`✅ SW: API response cached: ${request.url}`);
+      cache.put(request, networkResponse.clone());
     }
-
-    return fetchResponse;
+    
+    return networkResponse;
   } catch (error) {
-    console.log(`🔄 SW: API network failed, trying cache: ${request.url}`);
-    
-    const cache = await caches.open(DYNAMIC_CACHE);
-    const cachedResponse = await cache.match(request);
-    
+    // Try cache on network failure
+    const cachedResponse = await caches.match(request);
     if (cachedResponse) {
-      console.log(`📋 SW: Serving API response from cache: ${request.url}`);
       return cachedResponse;
     }
-
-    console.error(`❌ SW: API request failed completely: ${request.url}`, error);
-    return generateAPIErrorResponse();
+    
+    // Return offline fallback for navigation requests
+    if (request.mode === 'navigate') {
+      return generateOfflineFallback();
+    }
+    
+    throw error;
   }
 }
 
 /**
- * Handle document requests - Cache First with network update
+ * Stale While Revalidate Strategy - For images
  */
-async function handleDocumentRequest(request) {
-  try {
-    const cache = await caches.open(DYNAMIC_CACHE);
-    const cachedResponse = await cache.match(request);
-
-    if (cachedResponse) {
-      // Serve from cache immediately
-      updateCacheInBackground(request, cache, 60 * 60 * 1000); // 1 hour
-      return cachedResponse;
-    }
-
-    console.log(`📝 SW: Fetching document: ${request.url}`);
-    const fetchResponse = await fetch(request);
-    
-    if (fetchResponse.ok) {
-      const responseToCache = fetchResponse.clone();
-      await cache.put(request, responseToCache);
-      console.log(`✅ SW: Document cached: ${request.url}`);
-    }
-
-    return fetchResponse;
-  } catch (error) {
-    console.error(`❌ SW: Document request failed: ${request.url}`, error);
-    return generateOfflineFallback();
-  }
-}
-
-/**
- * Update cache in background (stale-while-revalidate)
- */
-async function updateCacheInBackground(request, cache, maxAge) {
-  try {
-    const cachedResponse = await cache.match(request);
-    if (cachedResponse) {
-      const dateHeader = cachedResponse.headers.get('date');
-      if (dateHeader) {
-        const cacheDate = new Date(dateHeader).getTime();
-        const now = Date.now();
-        
-        // Only update if cache is older than maxAge
-        if (now - cacheDate < maxAge) {
-          return;
-        }
+async function staleWhileRevalidateStrategy(request) {
+  const cache = await caches.open(IMAGE_CACHE);
+  const cachedResponse = await cache.match(request);
+  
+  const fetchPromise = fetch(request)
+    .then(response => {
+      if (response.ok) {
+        cache.put(request, response.clone());
       }
-    }
+      return response;
+    })
+    .catch(() => cachedResponse);
+  
+  return cachedResponse || fetchPromise;
+}
 
-    // Fetch updated version
-    const fetchResponse = await fetch(request);
-    if (fetchResponse.ok) {
-      await cache.put(request, fetchResponse.clone());
-      console.log(`🔄 SW: Background cache update: ${request.url}`);
+/**
+ * Update cache in background
+ */
+async function updateCacheInBackground(request, cache) {
+  try {
+    const freshResponse = await fetch(request, {
+      cache: 'no-cache'
+    });
+    if (freshResponse.ok) {
+      await cache.put(request, freshResponse);
+      console.log(`🔄 Updated: ${request.url}`);
     }
   } catch (error) {
-    console.log(`⚠️ SW: Background update failed: ${request.url}`);
+    // Silent fail - we have cached version
   }
 }
 
 /**
- * Request type detection functions
+ * Check request types
  */
-function isImageRequest(request) {
-  const url = request.url.toLowerCase();
-  return IMAGE_EXTENSIONS.some(ext => url.includes(ext)) || 
-         request.destination === 'image';
-}
-
-function isFontRequest(request) {
-  const url = request.url.toLowerCase();
-  return FONT_EXTENSIONS.some(ext => url.includes(ext)) ||
-         url.includes('fonts.googleapis.com') ||
-         request.destination === 'font';
-}
-
 function isStaticAsset(request) {
-  const url = request.url.toLowerCase();
+  const url = request.url;
   return url.includes('.css') || 
          url.includes('.js') || 
-         url.includes('.manifest') ||
-         url.includes('cdnjs.cloudflare.com');
+         url.includes('manifest.json') ||
+         url.includes('fonts.googleapis.com') ||
+         url.includes('fonts.gstatic.com');
+}
+
+function isImageRequest(request) {
+  const url = request.url.toLowerCase();
+  return /\.(jpg|jpeg|png|gif|webp|avif|svg|ico)$/.test(url) ||
+         url.includes('cdn-icons-png.flaticon.com');
 }
 
 function isAPIRequest(request) {
   const url = new URL(request.url);
-  return url.pathname.startsWith('/api/') ||
-         url.pathname.startsWith('/v1/') ||
-         url.pathname.includes('/api/');
+  return url.pathname.startsWith('/api/');
 }
 
 /**
- * Fallback generators
+ * Generate offline fallback page - Minimalist design
  */
-function generateImageFallback(originalUrl = '') {
-  const fileName = originalUrl.split('/').pop() || 'image';
-  const svg = `
-    <svg width="200" height="150" xmlns="http://www.w3.org/2000/svg" style="background: #f8f9fa">
-      <rect width="200" height="150" fill="#e5e7eb" rx="8"/>
-      <circle cx="100" cy="60" r="20" fill="#9ca3af"/>
-      <path d="M70 90 L130 90 L120 110 L80 110 Z" fill="#9ca3af"/>
-      <text x="100" y="130" text-anchor="middle" fill="#6b7280" font-family="system-ui" font-size="12">
-        ${fileName}
-      </text>
-      <text x="100" y="145" text-anchor="middle" fill="#9ca3af" font-family="system-ui" font-size="10">
-        Available offline
-      </text>
-    </svg>
-  `;
-  
-  return new Response(svg, {
-    headers: {
-      'Content-Type': 'image/svg+xml',
-      'Cache-Control': 'public, max-age=86400'
-    }
-  });
-}
-
 function generateOfflineFallback() {
   const offlineHTML = `
     <!DOCTYPE html>
@@ -462,50 +359,52 @@ function generateOfflineFallback() {
         }
         
         body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          background: #ffffff;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          background: #FFFFFF;
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
           padding: 20px;
-          color: #374151;
+          color: #000000;
         }
         
         .offline-container {
           text-align: center;
-          background: white;
+          background: #FFFFFF;
           padding: 48px 32px;
-          border-radius: 16px;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
           max-width: 480px;
           width: 100%;
+          border: 1px solid #E0E0E0;
         }
         
         .offline-icon {
-          font-size: 4rem;
+          font-size: 3rem;
           margin-bottom: 24px;
-          opacity: 0.8;
+          color: #2D5A27;
         }
         
         h1 {
+          font-family: Georgia, serif;
           color: #2D5A27;
-          font-size: 2rem;
+          font-size: 1.875rem;
           font-weight: 700;
           margin-bottom: 16px;
           line-height: 1.2;
         }
         
         .description {
-          color: #6b7280;
+          color: #666666;
           line-height: 1.6;
           margin-bottom: 32px;
-          font-size: 1.1rem;
+          font-size: 1rem;
         }
         
         .retry-btn {
           background: #2D5A27;
-          color: white;
+          color: #FFFFFF;
           border: none;
           padding: 12px 32px;
           border-radius: 8px;
@@ -517,22 +416,23 @@ function generateOfflineFallback() {
         }
         
         .retry-btn:hover {
-          background: #1F3F1A;
+          background: #4A7C59;
           transform: translateY(-1px);
         }
         
         .offline-features {
           text-align: left;
-          background: #f8f9fa;
+          background: #FAFAFA;
           padding: 24px;
-          border-radius: 12px;
+          border-radius: 8px;
           margin-top: 24px;
+          border: 1px solid #E0E0E0;
         }
         
         .offline-features h3 {
           color: #2D5A27;
-          font-size: 1.1rem;
-          margin-bottom: 16px;
+          font-size: 1rem;
+          margin-bottom: 12px;
           font-weight: 600;
         }
         
@@ -542,16 +442,17 @@ function generateOfflineFallback() {
         }
         
         .offline-features li {
-          color: #6b7280;
+          color: #666666;
           margin-bottom: 8px;
-          padding-left: 24px;
+          padding-left: 20px;
           position: relative;
           line-height: 1.5;
+          font-size: 0.875rem;
         }
         
         .offline-features li::before {
           content: '✓';
-          color: #10b981;
+          color: #87A96B;
           font-weight: bold;
           position: absolute;
           left: 0;
@@ -560,17 +461,17 @@ function generateOfflineFallback() {
         .connection-status {
           margin-top: 16px;
           padding: 8px 16px;
-          background: #fef3cd;
-          border: 1px solid #fbbf24;
+          background: #FFF8F0;
+          border: 1px solid #E0E0E0;
           border-radius: 6px;
-          color: #92400e;
-          font-size: 0.9rem;
+          color: #666666;
+          font-size: 0.875rem;
         }
         
         .online {
-          background: #d1fae5;
-          border-color: #10b981;
-          color: #065f46;
+          background: #F0FFF4;
+          border-color: #87A96B;
+          color: #2D5A27;
         }
         
         @media (max-width: 480px) {
@@ -583,7 +484,7 @@ function generateOfflineFallback() {
           }
           
           .offline-icon {
-            font-size: 3rem;
+            font-size: 2.5rem;
           }
         }
       </style>
@@ -621,27 +522,19 @@ function generateOfflineFallback() {
           const retryBtn = document.querySelector('.retry-btn');
           
           if (navigator.onLine) {
-            statusEl.textContent = 'Connection restored! Click retry to reload.';
+            statusEl.textContent = 'Connection restored! Reloading...';
             statusEl.className = 'connection-status online';
-            retryBtn.textContent = 'Reload Page';
-            retryBtn.style.background = '#10b981';
+            setTimeout(() => window.location.reload(), 1000);
           } else {
             statusEl.textContent = 'Connection status: Offline';
             statusEl.className = 'connection-status';
-            retryBtn.textContent = 'Try Reconnecting';
-            retryBtn.style.background = '#2D5A27';
           }
         }
         
-        // Auto-reload when back online
-        window.addEventListener('online', () => {
-          updateConnectionStatus();
-          setTimeout(() => window.location.reload(), 1000);
-        });
-        
+        window.addEventListener('online', updateConnectionStatus);
         window.addEventListener('offline', updateConnectionStatus);
         
-        // Initial status
+        // Check initial status
         updateConnectionStatus();
       </script>
     </body>
@@ -656,240 +549,45 @@ function generateOfflineFallback() {
   });
 }
 
-function generateAPIErrorResponse() {
-  const errorResponse = {
-    error: true,
-    message: 'Service temporarily unavailable offline',
-    code: 'OFFLINE_MODE',
-    offline: true,
-    timestamp: new Date().toISOString(),
-    retry_after: '60s'
-  };
-  
-  return new Response(JSON.stringify(errorResponse), {
-    status: 503,
-    headers: {
-      'Content-Type': 'application/json',
-      'Cache-Control': 'no-cache',
-      'Retry-After': '60'
-    }
+/**
+ * Notify all clients
+ */
+async function notifyClients(type, data) {
+  const clients = await self.clients.matchAll();
+  clients.forEach(client => {
+    client.postMessage({ type, ...data });
   });
 }
 
 /**
- * Background Sync for offline actions
- */
-self.addEventListener('sync', (event) => {
-  console.log(`🔄 SW: Background sync triggered: ${event.tag}`);
-  
-  switch (event.tag) {
-    case 'search-sync':
-      event.waitUntil(syncSearchQueries());
-      break;
-    case 'analytics-sync':
-      event.waitUntil(syncAnalyticsEvents());
-      break;
-    case 'form-sync':
-      event.waitUntil(syncFormSubmissions());
-      break;
-    case 'cache-update':
-      event.waitUntil(updateCriticalCaches());
-      break;
-  }
-});
-
-async function syncSearchQueries() {
-  try {
-    console.log('🔍 SW: Syncing search queries...');
-    // Implementation for syncing stored search queries
-    const queries = await getStoredQueries();
-    if (queries.length > 0) {
-      await sendSearchAnalytics(queries);
-      await clearStoredQueries();
-    }
-    console.log('✅ SW: Search queries synced');
-  } catch (error) {
-    console.error('❌ SW: Search sync failed:', error);
-  }
-}
-
-async function syncAnalyticsEvents() {
-  try {
-    console.log('📊 SW: Syncing analytics events...');
-    // Implementation for syncing stored analytics
-    const events = await getStoredAnalytics();
-    if (events.length > 0) {
-      await sendAnalyticsEvents(events);
-      await clearStoredAnalytics();
-    }
-    console.log('✅ SW: Analytics events synced');
-  } catch (error) {
-    console.error('❌ SW: Analytics sync failed:', error);
-  }
-}
-
-async function syncFormSubmissions() {
-  try {
-    console.log('📝 SW: Syncing form submissions...');
-    // Implementation for syncing stored form data
-    const forms = await getStoredForms();
-    if (forms.length > 0) {
-      await sendFormSubmissions(forms);
-      await clearStoredForms();
-    }
-    console.log('✅ SW: Form submissions synced');
-  } catch (error) {
-    console.error('❌ SW: Form sync failed:', error);
-  }
-}
-
-async function updateCriticalCaches() {
-  try {
-    console.log('🔄 SW: Updating critical caches...');
-    await cacheStaticAssets();
-    await cacheImages();
-    console.log('✅ SW: Critical caches updated');
-  } catch (error) {
-    console.error('❌ SW: Cache update failed:', error);
-  }
-}
-
-// Placeholder functions for sync operations
-async function getStoredQueries() { return []; }
-async function sendSearchAnalytics(queries) { /* Implementation */ }
-async function clearStoredQueries() { /* Implementation */ }
-
-async function getStoredAnalytics() { return []; }
-async function sendAnalyticsEvents(events) { /* Implementation */ }
-async function clearStoredAnalytics() { /* Implementation */ }
-
-async function getStoredForms() { return []; }
-async function sendFormSubmissions(forms) { /* Implementation */ }
-async function clearStoredForms() { /* Implementation */ }
-
-/**
- * Push notification handler
- */
-self.addEventListener('push', (event) => {
-  console.log('🔔 SW: Push notification received');
-  
-  let notificationData = {
-    title: 'ClearCutParenting',
-    body: 'New parenting guidance available!',
-    icon: '/apple-touch-icon.png',
-    badge: '/badge-icon.png'
-  };
-
-  if (event.data) {
-    try {
-      notificationData = { ...notificationData, ...event.data.json() };
-    } catch (error) {
-      notificationData.body = event.data.text();
-    }
-  }
-
-  const options = {
-    body: notificationData.body,
-    icon: notificationData.icon,
-    badge: notificationData.badge,
-    vibrate: [200, 100, 200],
-    data: {
-      url: notificationData.url || '/',
-      timestamp: Date.now()
-    },
-    actions: [
-      {
-        action: 'view',
-        title: 'View',
-        icon: '/action-view.png'
-      },
-      {
-        action: 'dismiss',
-        title: 'Later',
-        icon: '/action-dismiss.png'
-      }
-    ],
-    requireInteraction: false,
-    silent: false
-  };
-
-  event.waitUntil(
-    self.registration.showNotification(notificationData.title, options)
-  );
-});
-
-/**
- * Notification click handler
- */
-self.addEventListener('notificationclick', (event) => {
-  console.log('🔔 SW: Notification clicked');
-  
-  event.notification.close();
-
-  const action = event.action;
-  const notificationData = event.notification.data;
-
-  if (action === 'view') {
-    event.waitUntil(
-      clients.openWindow(notificationData.url || '/')
-    );
-  } else if (action === 'dismiss') {
-    console.log('🔔 SW: Notification dismissed');
-  } else {
-    // Default action - focus existing window or open new one
-    event.waitUntil(
-      clients.matchAll({ type: 'window' }).then(clientList => {
-        if (clientList.length > 0) {
-          return clientList[0].focus();
-        }
-        return clients.openWindow('/');
-      })
-    );
-  }
-});
-
-/**
- * Message handling for cache management
+ * Message handling
  */
 self.addEventListener('message', (event) => {
   const { type, data } = event.data || {};
   
   switch (type) {
-    case 'CACHE_CLEANUP':
-      event.waitUntil(performCacheCleanup());
-      break;
-      
     case 'SKIP_WAITING':
       self.skipWaiting();
       break;
       
-    case 'GET_CACHE_SIZE':
-      event.waitUntil(
-        getCacheSize().then(size => {
-          event.ports[0]?.postMessage({ cacheSize: size });
-        })
-      );
+    case 'CACHE_CLEANUP':
+      event.waitUntil(performCacheCleanup());
       break;
       
-    case 'PRELOAD_CONTENT':
-      event.waitUntil(preloadContent(data));
-      break;
-      
-    case 'UPDATE_CACHE':
-      event.waitUntil(updateSpecificCache(data));
+    case 'GET_VERSION':
+      event.ports[0]?.postMessage({ version: CACHE_VERSION });
       break;
   }
 });
 
 /**
- * Perform comprehensive cache cleanup
+ * Perform cache cleanup
  */
 async function performCacheCleanup() {
   try {
-    console.log('🧹 SW: Starting cache cleanup...');
+    console.log('🧹 Starting cache cleanup...');
     
-    const maxCacheAge = 7 * 24 * 60 * 60 * 1000; // 7 days
-    const maxCacheSize = 50 * 1024 * 1024; // 50MB
+    const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days
     const now = Date.now();
     
     const cacheNames = await caches.keys();
@@ -897,157 +595,57 @@ async function performCacheCleanup() {
     for (const cacheName of cacheNames) {
       const cache = await caches.open(cacheName);
       const requests = await cache.keys();
-      let cacheSize = 0;
       
-      // Calculate cache size and remove old entries
       for (const request of requests) {
         const response = await cache.match(request);
         if (response) {
           const dateHeader = response.headers.get('date');
-          
           if (dateHeader) {
             const responseDate = new Date(dateHeader).getTime();
-            if (now - responseDate > maxCacheAge) {
+            if (now - responseDate > maxAge) {
               await cache.delete(request);
-              console.log(`🗑️ SW: Deleted old cache entry: ${request.url}`);
-              continue;
+              console.log(`🗑️ Deleted old entry: ${request.url}`);
             }
           }
-          
-          // Calculate size
-          const blob = await response.blob();
-          cacheSize += blob.size;
         }
       }
-      
-      // If cache is too large, remove oldest entries
-      if (cacheSize > maxCacheSize) {
-        console.log(`📏 SW: Cache ${cacheName} is too large (${cacheSize} bytes), cleaning up...`);
-        await trimCache(cache, maxCacheSize * 0.8); // Trim to 80% of max
-      }
     }
     
-    console.log('✅ SW: Cache cleanup completed');
+    console.log('✅ Cache cleanup completed');
   } catch (error) {
-    console.error('❌ SW: Cache cleanup failed:', error);
+    console.error('❌ Cache cleanup failed:', error);
   }
 }
 
 /**
- * Trim cache to specific size
+ * Background sync
  */
-async function trimCache(cache, maxSize) {
-  const requests = await cache.keys();
-  const entries = [];
+self.addEventListener('sync', (event) => {
+  console.log(`🔄 Background sync: ${event.tag}`);
   
-  // Get all entries with dates
-  for (const request of requests) {
-    const response = await cache.match(request);
-    if (response) {
-      const dateHeader = response.headers.get('date');
-      const date = dateHeader ? new Date(dateHeader).getTime() : 0;
-      const blob = await response.blob();
-      
-      entries.push({
-        request,
-        date,
-        size: blob.size
-      });
-    }
+  if (event.tag === 'cache-update') {
+    event.waitUntil(
+      Promise.all([
+        cacheStaticAssets(),
+        cacheImages()
+      ])
+    );
   }
-  
-  // Sort by date (oldest first)
-  entries.sort((a, b) => a.date - b.date);
-  
-  let currentSize = entries.reduce((sum, entry) => sum + entry.size, 0);
-  
-  // Remove oldest entries until under size limit
-  for (const entry of entries) {
-    if (currentSize <= maxSize) break;
-    
-    await cache.delete(entry.request);
-    currentSize -= entry.size;
-    console.log(`🗑️ SW: Trimmed cache entry: ${entry.request.url}`);
-  }
-}
-
-/**
- * Get total cache size
- */
-async function getCacheSize() {
-  const cacheNames = await caches.keys();
-  let totalSize = 0;
-  
-  for (const cacheName of cacheNames) {
-    const cache = await caches.open(cacheName);
-    const requests = await cache.keys();
-    
-    for (const request of requests) {
-      const response = await cache.match(request);
-      if (response) {
-        const blob = await response.blob();
-        totalSize += blob.size;
-      }
-    }
-  }
-  
-  return totalSize;
-}
-
-/**
- * Preload specific content
- */
-async function preloadContent(urls) {
-  if (!Array.isArray(urls)) return;
-  
-  const cache = await caches.open(DYNAMIC_CACHE);
-  
-  for (const url of urls) {
-    try {
-      const response = await fetch(url);
-      if (response.ok) {
-        await cache.put(url, response);
-        console.log(`📦 SW: Preloaded: ${url}`);
-      }
-    } catch (error) {
-      console.warn(`⚠️ SW: Failed to preload: ${url}`, error);
-    }
-  }
-}
-
-/**
- * Update specific cache
- */
-async function updateSpecificCache({ cacheName, urls }) {
-  const cache = await caches.open(cacheName);
-  
-  for (const url of urls) {
-    try {
-      const response = await fetch(url);
-      if (response.ok) {
-        await cache.put(url, response);
-        console.log(`🔄 SW: Updated cache: ${url}`);
-      }
-    } catch (error) {
-      console.warn(`⚠️ SW: Failed to update cache: ${url}`, error);
-    }
-  }
-}
+});
 
 /**
  * Error handling
  */
 self.addEventListener('error', (event) => {
-  console.error('❌ SW: Global error:', event.error);
+  console.error('❌ SW Error:', event.error);
 });
 
 self.addEventListener('unhandledrejection', (event) => {
-  console.error('❌ SW: Unhandled promise rejection:', event.reason);
+  console.error('❌ SW Unhandled rejection:', event.reason);
   event.preventDefault();
 });
 
 // Initialization log
-console.log('🚀 SW: Minimalist ClearCutParenting Service Worker loaded');
-console.log(`📦 SW: Cache version - ${CACHE_VERSION}`);
-console.log(`🎯 SW: Critical assets: ${CRITICAL_ASSETS.length}`);
-console.log(`🖼️ SW: Image assets: ${IMAGE_ASSETS.length}`);
+console.log('🚀 Minimalist ClearCutParenting Service Worker v3.0.0');
+console.log(`📦 Cache version: ${CACHE_VERSION}`);
+console.log(`✨ Optimized for minimalist design`);

@@ -1,15 +1,21 @@
 /**
- * ClearCutParenting - White Background Minimalist Design Implementation
+ * ClearCutParenting - Minimalist Design Implementation
  * Optimized JavaScript for Performance and User Experience
+ * 
+ * Key Features:
+ * - Clean, minimalist interactions
+ * - Optimized performance with debouncing and throttling
+ * - Accessibility-first approach
+ * - Progressive enhancement
  */
 
-class WhiteMinimalistParentingApp {
+class MinimalistParentingApp {
   constructor() {
     this.config = {
       searchDelay: 200,
       scrollThrottle: 16,
       resizeDebounce: 150,
-      animationDuration: 300,
+      animationDuration: 200,
       toastDuration: 3000
     };
     
@@ -34,14 +40,17 @@ class WhiteMinimalistParentingApp {
    */
   init() {
     try {
-      this.cacheElements();
-      this.setupEventListeners();
-      this.initializeFeatures();
-      this.setupPerformanceOptimizations();
-      this.initAccessibility();
-
-      this.state.isLoaded = true;
-      console.log('✨ Minimalist ClearCutParenting App initialized');
+      // Performance: Use requestAnimationFrame for initial setup
+      requestAnimationFrame(() => {
+        this.cacheElements();
+        this.setupEventListeners();
+        this.initializeFeatures();
+        this.setupPerformanceOptimizations();
+        this.initAccessibility();
+        
+        this.state.isLoaded = true;
+        console.log('✨ Minimalist ClearCutParenting App initialized');
+      });
     } catch (err) {
       console.error('❌ Initialization error:', err);
       this.handleInitError();
@@ -66,7 +75,7 @@ class WhiteMinimalistParentingApp {
   }
 
   /**
-   * Setup all event listeners
+   * Setup all event listeners with proper event delegation
    */
   setupEventListeners() {
     // Optimized scroll handling
@@ -75,11 +84,11 @@ class WhiteMinimalistParentingApp {
     // Window events
     window.addEventListener('resize', this.debounce(() => {
       this.handleResize();
-    }, this.config.resizeDebounce));
+    }, this.config.resizeDebounce), { passive: true });
 
     window.addEventListener('load', () => {
       this.handlePageLoad();
-    });
+    }, { once: true });
 
     // Search functionality
     this.setupSearchHandling();
@@ -160,7 +169,7 @@ class WhiteMinimalistParentingApp {
    */
   setupQuestionCardHandling() {
     this.elements.questionCards.forEach((card, index) => {
-      // Add entrance animation
+      // Add entrance animation with minimalist approach
       this.addEntranceAnimation(card, index);
 
       // Click handler
@@ -168,13 +177,14 @@ class WhiteMinimalistParentingApp {
         this.handleQuestionCardClick(card, index);
       });
 
-      // Hover effects
+      // Hover effects - subtle for minimalism
       card.addEventListener('mouseenter', () => {
         this.handleQuestionCardHover(card);
       });
 
       // Keyboard handling
       card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
       card.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -230,13 +240,13 @@ class WhiteMinimalistParentingApp {
   }
 
   /**
-   * Handle scroll events
+   * Handle scroll events - Minimalist approach
    */
   handleScroll() {
     const scrollY = window.scrollY;
-    const threshold = 80;
+    const threshold = 60; // Reduced threshold for minimalist feel
 
-    // Update header state
+    // Update header state with subtle transition
     if (scrollY > threshold && !this.state.isScrolled) {
       this.state.isScrolled = true;
       this.elements.stickyHeader?.classList.add('scrolled');
@@ -339,7 +349,7 @@ class WhiteMinimalistParentingApp {
   }
 
   /**
-   * Display search results
+   * Display search results - Minimalist style
    */
   displaySearchResults(results, query) {
     if (!this.elements.searchResults) return;
@@ -395,25 +405,25 @@ class WhiteMinimalistParentingApp {
   }
 
   /**
-   * Highlight search matches
+   * Highlight search matches - Subtle for minimalism
    */
   highlightSearchMatches(results) {
     // Clear previous highlights
     this.clearSearchHighlights();
 
-    // Add highlights with staggered animation
+    // Add highlights with subtle animation
     results.forEach((result, index) => {
       setTimeout(() => {
-        result.element.style.transform = 'translateY(-4px) scale(1.02)';
-        result.element.style.boxShadow = '0 8px 25px rgba(45, 90, 39, 0.15)';
+        result.element.style.transform = 'translateY(-2px)';
+        result.element.style.boxShadow = '0 4px 12px rgba(45, 90, 39, 0.1)';
         result.element.classList.add('search-highlight');
-      }, index * 100);
+      }, index * 50); // Faster animation for minimalist feel
     });
 
     // Auto-clear highlights
     setTimeout(() => {
       this.clearSearchHighlights();
-    }, 4000);
+    }, 3000);
   }
 
   /**
@@ -449,16 +459,16 @@ class WhiteMinimalistParentingApp {
   }
 
   /**
-   * Handle question card clicks
+   * Handle question card clicks - Minimalist feedback
    */
   handleQuestionCardClick(card, index) {
     const category = card.dataset.category;
     
-    // Add click animation
+    // Subtle click animation
     card.style.transform = 'scale(0.98)';
     setTimeout(() => {
       card.style.transform = '';
-    }, 150);
+    }, 100);
 
     // Show loading state
     this.showToast(`Loading ${category} guidance...`, 'info');
@@ -469,7 +479,7 @@ class WhiteMinimalistParentingApp {
     // Simulate content loading
     setTimeout(() => {
       this.showToast(`${category} content ready!`, 'success');
-    }, 800);
+    }, 600);
   }
 
   /**
@@ -491,7 +501,7 @@ class WhiteMinimalistParentingApp {
         this.trackEvent('story_read_more');
         setTimeout(() => {
           this.showToast('Story loaded successfully!', 'success');
-        }, 600);
+        }, 500);
         break;
         
       case 'share-story':
@@ -499,23 +509,23 @@ class WhiteMinimalistParentingApp {
         this.trackEvent('story_share');
         setTimeout(() => {
           this.showToast('Form ready for submission!', 'success');
-        }, 500);
+        }, 400);
         break;
     }
   }
 
   /**
-   * Add entrance animation to elements
+   * Add entrance animation to elements - Minimalist approach
    */
   addEntranceAnimation(element, index) {
     element.style.opacity = '0';
-    element.style.transform = 'translateY(20px)';
+    element.style.transform = 'translateY(10px)';
     
     setTimeout(() => {
-      element.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      element.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
       element.style.opacity = '1';
       element.style.transform = 'translateY(0)';
-    }, index * 100 + 200);
+    }, index * 50 + 100); // Faster animation for minimalist feel
   }
 
   /**
@@ -551,26 +561,26 @@ class WhiteMinimalistParentingApp {
       behavior: 'smooth'
     });
 
-    // Highlight the card
+    // Subtle highlight
     setTimeout(() => {
-      card.style.transform = 'translateY(-6px) scale(1.05)';
-      card.style.boxShadow = '0 12px 40px rgba(45, 90, 39, 0.2)';
+      card.style.transform = 'translateY(-3px)';
+      card.style.boxShadow = '0 4px 12px rgba(45, 90, 39, 0.15)';
       
       setTimeout(() => {
         card.style.transform = '';
         card.style.boxShadow = '';
-      }, 2000);
-    }, 500);
+      }, 1500);
+    }, 400);
   }
 
   /**
-   * Highlight cards for specific section
+   * Highlight cards for specific section - Minimalist style
    */
   highlightSectionCards(section) {
     this.elements.questionCards.forEach(card => {
       if (card.dataset.category === section) {
-        card.style.transform = 'translateY(-3px) scale(1.02)';
-        card.style.boxShadow = '0 8px 25px rgba(45, 90, 39, 0.15)';
+        card.style.transform = 'translateY(-2px)';
+        card.style.boxShadow = '0 2px 8px rgba(45, 90, 39, 0.1)';
       } else {
         card.style.transform = '';
         card.style.boxShadow = '';
@@ -583,7 +593,7 @@ class WhiteMinimalistParentingApp {
         card.style.transform = '';
         card.style.boxShadow = '';
       });
-    }, 3000);
+    }, 2000);
   }
 
   /**
@@ -800,7 +810,10 @@ class WhiteMinimalistParentingApp {
             this.observers.imageObserver.unobserve(img);
           }
         });
-      }, { threshold: 0.1, rootMargin: '50px' });
+      }, { 
+        threshold: 0.1, 
+        rootMargin: '50px' 
+      });
 
       this.elements.images.forEach(img => {
         this.observers.imageObserver.observe(img);
@@ -809,18 +822,20 @@ class WhiteMinimalistParentingApp {
   }
 
   /**
-   * Setup intersection observers
+   * Setup intersection observers for animations
    */
   setupIntersectionObservers() {
     if ('IntersectionObserver' in window) {
       this.observers.animationObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+            entry.target.style.animation = 'fadeInUp 0.4s ease forwards';
             this.observers.animationObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.2 });
+      }, { 
+        threshold: 0.15 
+      });
 
       // Observe question cards for entrance animations
       this.elements.questionCards.forEach(card => {
@@ -834,8 +849,7 @@ class WhiteMinimalistParentingApp {
    */
   preloadCriticalResources() {
     const criticalFonts = [
-      'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap',
-      'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap'
+      'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
     ];
 
     criticalFonts.forEach(fontUrl => {
@@ -877,7 +891,7 @@ class WhiteMinimalistParentingApp {
   }
 
   /**
-   * Show toast notification
+   * Show toast notification - Minimalist style
    */
   showToast(message, type = 'info', duration = null) {
     if (!this.elements.toastContainer) return;
@@ -916,14 +930,14 @@ class WhiteMinimalistParentingApp {
   }
 
   /**
-   * Get toast icon
+   * Get toast icon - Minimalist icons
    */
   getToastIcon(type) {
     const icons = {
-      info: 'ℹ️',
-      success: '✅',
-      warning: '⚠️',
-      error: '❌'
+      info: 'ℹ',
+      success: '✓',
+      warning: '⚠',
+      error: '✕'
     };
     return icons[type] || icons.info;
   }
@@ -941,7 +955,7 @@ class WhiteMinimalistParentingApp {
       if (toast.parentNode) {
         toast.parentNode.removeChild(toast);
       }
-    }, 300);
+    }, 200);
   }
 
   /**
@@ -1104,19 +1118,19 @@ class WhiteMinimalistParentingApp {
   }
 }
 
-// Enhanced styles for the minimalist design
-const enhancedStyles = `
+// Minimalist styles injection
+const minimalistStyles = `
   .search-highlight {
-    animation: gentlePulse 2s ease-in-out;
+    animation: subtlePulse 1.5s ease-in-out;
   }
 
-  @keyframes gentlePulse {
+  @keyframes subtlePulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.9; }
+    50% { opacity: 0.95; }
   }
 
   .loaded {
-    animation: fadeInUp 0.8s ease;
+    animation: fadeInUp 0.6s ease;
   }
 
   .question-card {
@@ -1162,12 +1176,12 @@ const enhancedStyles = `
   }
 `;
 
-// Inject enhanced styles
+// Inject minimalist styles
 const styleSheet = document.createElement('style');
-styleSheet.textContent = enhancedStyles;
+styleSheet.textContent = minimalistStyles;
 document.head.appendChild(styleSheet);
 
-// Initialize the app
+// Initialize the app when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     window.minimalistParentingApp = new MinimalistParentingApp();
