@@ -38,19 +38,17 @@ const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.s
  * Install Event - Cache static assets
  */
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => cache.addAll(STATIC_ASSETS))
-  );
-  self.skipWaiting(); // already present in your SW; keep it
-});
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then(names => Promise.all(names.map(n => {
-      if (![STATIC_CACHE, DYNAMIC_CACHE, IMAGE_CACHE].includes(n)) return caches.delete(n);
-    })))
-  );
-  self.clients.claim(); // already present; keep it
+  event.waitUntil((async () => {
+    const cache = await caches.open(STATIC_CACHE);
+    const results = await Promise.allSettled(
+      STATIC_ASSETS.map((url) => cache.add(url))
+    );
+    const failures = results.filter(r => r.status === 'rejected');
+    if (failures.length) {
+      console.warn('SW skipped missing assets:', failures.length);
+    }
+  })());
+  self.skipWaiting();
 });
 
 /**
