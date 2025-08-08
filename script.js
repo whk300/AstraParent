@@ -177,7 +177,20 @@ class ClearCutParentingApp {
     // Add smooth transitions
     this.elements.stickyHeader.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
   }
-
+  setupSmoothScrolling() {
+    // Already using CSS: scroll-behavior: smooth;
+    // Keep this here to avoid runtime errors.
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  }
   /**
    * Handle search input
    */
