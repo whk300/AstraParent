@@ -37,6 +37,12 @@
     <div class="loading-spinner"></div>
     <p class="loading-text">Loading ClearCutParenting...</p>
   </div>
+<script>
+  window.addEventListener('DOMContentLoaded', () => setTimeout(() => {
+    const ov = document.getElementById('loadingOverlay');
+    if (ov) { ov.classList.add('fade-out'); setTimeout(() => ov.remove(), 500); }
+  }, 1500));
+</script>
 
   <!-- Skip Navigation for Accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
