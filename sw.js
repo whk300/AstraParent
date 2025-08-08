@@ -3,7 +3,7 @@
  * Provides offline functionality, caching, and performance optimizations
  */
 
-const CACHE_NAME = 'clearcutparenting-v1.2.0';
+const CACHE_NAME = 'clearcutparenting-v1.2.1';
 const STATIC_CACHE = 'clearcutparenting-static-v1';
 const DYNAMIC_CACHE = 'clearcutparenting-dynamic-v1';
 const IMAGE_CACHE = 'clearcutparenting-images-v1';
@@ -38,22 +38,19 @@ const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.avif', '.s
  * Install Event - Cache static assets
  */
 self.addEventListener('install', (event) => {
-  console.log('🔧 Service Worker: Installing...');
-  
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then((cache) => {
-        console.log('📦 Service Worker: Caching static assets');
-        return cache.addAll(STATIC_ASSETS);
-      })
-      .then(() => {
-        console.log('✅ Service Worker: Static assets cached successfully');
-        return self.skipWaiting();
-      })
-      .catch((error) => {
-        console.error('❌ Service Worker: Failed to cache static assets:', error);
-      })
+    caches.open(STATIC_CACHE).then((cache) => cache.addAll(STATIC_ASSETS))
   );
+  self.skipWaiting(); // already present in your SW; keep it
+});
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then(names => Promise.all(names.map(n => {
+      if (![STATIC_CACHE, DYNAMIC_CACHE, IMAGE_CACHE].includes(n)) return caches.delete(n);
+    })))
+  );
+  self.clients.claim(); // already present; keep it
 });
 
 /**
