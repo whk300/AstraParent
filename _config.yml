@@ -1,14 +1,1 @@
-title: AstraParent
-email: admin-astraparent@woobrothers.com
-description: >
-  Advice for mindful parenting and family life.
-baseurl: ""
-url: "https://whk300.github.io/AstraParent"
-theme: minima
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-exclude:
-  - README.md
-  - .gitignore
-  - node_modules/
+# Jekyll Configuration
