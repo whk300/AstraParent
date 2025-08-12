@@ -1,1 +1,81 @@
 # Jekyll Configuration
+# Site settings
+title: AstraParenting
+tagline: "No jargon. Just clear, kind parenting help"
+description: "Professional parenting guidance for every stage from pregnancy to teens"
+url: "https://whk300.github.io"
+baseurl: "/AstraParenting"
+permalink: /:categories/:title/
+
+markdown: kramdown
+highlighter: rouge
+
+sass:
+  sass_dir: _sass
+  style: compressed
+
+collections:
+  pregnancy:
+    output: true
+    permalink: /topics/pregnancy/:path/
+  infant:
+    output: true
+    permalink: /topics/infant/:path/
+  toddler:
+    output: true
+    permalink: /topics/toddler/:path/
+  preschooler:
+    output: true
+    permalink: /topics/preschooler/:path/
+  schooler:
+    output: true
+    permalink: /topics/schooler/:path/
+  early_teens:
+    output: true
+    permalink: /topics/early-teens/:path/
+  late_teens:
+    output: true
+    permalink: /topics/late-teens/:path/
+  stories:
+    output: true
+    permalink: /stories/:title/
+
+defaults:
+  # Pregnancy - Nutrition
+  - scope:
+      path: "_pregnancy/nutrition"
+    values:
+      layout: "topic"
+      category: "pregnancy"
+      subcategory: "nutrition"
+  # Pregnancy - Health
+  - scope:
+      path: "_pregnancy/health-symptoms"
+    values:
+      layout: "topic"
+      category: "pregnancy"
+      subcategory: "health-symptoms"
+  # Pregnancy - Lifestyle
+  - scope:
+      path: "_pregnancy/lifestyle"
+    values:
+      layout: "topic"
+      category: "pregnancy"
+      subcategory: "lifestyle"
+  # Add similar defaults for other categories...
+
+# Plugins
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude files
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - generate-content.sh
+  - template.md
+  - README.md
