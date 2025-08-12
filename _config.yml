@@ -79,3 +79,8 @@ exclude:
   - generate-content.sh
   - template.md
   - README.md
+
+# GitHub Pages settings
+remote_theme: false
+plugins:
+  - jekyll-relative-links
