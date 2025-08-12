@@ -4,7 +4,7 @@ title: AstraParenting
 tagline: "No jargon. Just clear, kind parenting help"
 description: "Professional parenting guidance for every stage from pregnancy to teens"
 url: "https://whk300.github.io"
-baseurl: "/AstraParenting"
+baseurl: "/AstraParent"
 permalink: /:categories/:title/
 
 markdown: kramdown
