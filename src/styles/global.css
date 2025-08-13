@@ -363,6 +363,7 @@ a {
   color: inherit;
   display: block;
 }
+echo '
 /* Dropdown Navigation Styles */
 .nav-wrapper {
   background: white;
@@ -440,3 +441,7 @@ a {
   color: var(--color-primary);
   padding-left: 16px;
 }
+
+.brand h1 {
+  font-size: 2rem;
+}' >> src/styles/global.css
