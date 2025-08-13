@@ -1,0 +1,120 @@
+---
+const navItems = [
+  { 
+    label: 'Pregnancy', 
+    href: '/pregnancy',
+    dropdownItems: [
+      { label: 'Nutrition', href: '/pregnancy/nutrition' },
+      { label: 'Common Symptoms & Discomforts', href: '/pregnancy/symptoms' },
+      { label: 'Lifestyle', href: '/pregnancy/lifestyle' },
+      { label: 'Prenatal Care & Doctor Visits', href: '/pregnancy/prenatal-care' },
+      { label: 'Labor Delivery & Birth Preparation', href: '/pregnancy/birth-prep' }
+    ]
+  },
+  { 
+    label: 'Infants (0-12m)', 
+    href: '/infants',
+    dropdownItems: [
+      { label: 'Sleep Training & Sleep Deprivation', href: '/infants/sleep' },
+      { label: "Infants' Feeding Challenges", href: '/infants/feeding' },
+      { label: 'Colic & Excessive Crying', href: '/infants/colic' },
+      { label: 'Developmental Milestones Anxiety', href: '/infants/milestones' },
+      { label: 'Bonding & Attachment', href: '/infants/bonding' }
+    ]
+  },
+  { 
+    label: 'Toddlers (1-2)', 
+    href: '/toddlers',
+    dropdownItems: [
+      { label: 'Tantrums & Emotional Regulation', href: '/toddlers/tantrums' },
+      { label: 'Potty Training Resistance', href: '/toddlers/potty-training' },
+      { label: 'Picky Eating & Nutrition', href: '/toddlers/eating' },
+      { label: 'Safety & Constant Supervision', href: '/toddlers/safety' },
+      { label: 'Language Delays or Limited Communication', href: '/toddlers/language' }
+    ]
+  },
+  { 
+    label: 'Preschoolers (3-5)', 
+    href: '/preschoolers',
+    dropdownItems: [
+      { label: 'Preparing for Kindergarten', href: '/preschoolers/kindergarten' },
+      { label: 'Aggressive Behaviors', href: '/preschoolers/aggression' },
+      { label: 'Emotional Expression', href: '/preschoolers/emotions' },
+      { label: 'Routine & Structure', href: '/preschoolers/routine' },
+      { label: 'Early Screen Exposure', href: '/preschoolers/screen-time' }
+    ]
+  },
+  { 
+    label: 'School (6-10)', 
+    href: '/school-age',
+    dropdownItems: [
+      { label: 'Homework Battles & Academic Pressure', href: '/school-age/homework' },
+      { label: 'Bullying & Social Dynamics', href: '/school-age/bullying' },
+      { label: 'Excessive Screen Time & Device Use', href: '/school-age/screen-time' },
+      { label: 'Attention & Focus Issues', href: '/school-age/attention' },
+      { label: 'Building Self-esteem & Resilience', href: '/school-age/self-esteem' }
+    ]
+  },
+  { 
+    label: 'Early Teens (11-14)', 
+    href: '/early-teens',
+    dropdownItems: [
+      { label: 'Puberty & Body Image Issues', href: '/early-teens/puberty' },
+      { label: 'Social Media & Online Safety', href: '/early-teens/social-media' },
+      { label: 'Friendship Drama & Peer Pressure', href: '/early-teens/peer-pressure' },
+      { label: 'Academic Stress & Middle School Transition', href: '/early-teens/academics' },
+      { label: 'Defiance & Power Struggles', href: '/early-teens/defiance' }
+    ]
+  },
+  { 
+    label: 'Late Teens (15-18)', 
+    href: '/late-teens',
+    dropdownItems: [
+      { label: 'Mental Health Crisis Prevention', href: '/late-teens/mental-health' },
+      { label: 'College & Future Planning Stress', href: '/late-teens/college' },
+      { label: 'Substance Use & Experimentation', href: '/late-teens/substances' },
+      { label: 'Digital Footprint & Online Reputation', href: '/late-teens/digital-footprint' },
+      { label: 'Romantic Relationships & Consent Education', href: '/late-teens/relationships' }
+    ]
+  }
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="header-nav">
+  <div class="header-content">
+    <div class="brand">
+      <h1>AstraParent</h1>
+      <span class="tagline">Clear, kind parenting help</span>
+    </div>
+    <div class="search-box">
+      <input type="search" placeholder="Ask your parenting questions..." />
+    </div>
+  </div>
+</header>
+
+<div class="nav-wrapper">
+  <nav class="nav-links">
+    {navItems.map(item => (
+      <div class="nav-item">
+        <a 
+          href={item.href}
+          class={currentPath.startsWith(item.href) ? 'active' : ''}
+        >
+          {item.label}
+        </a>
+        {item.dropdownItems && (
+          <div class="dropdown">
+            {item.dropdownItems.map(subItem => (
+              <a href={subItem.href}>{subItem.label}</a>
+            ))}
+          </div>
+        )}
+      </div>
+    ))}
+    <div class="nav-item">
+      <a href="/patreon" class="support-btn">Patreon</a>
+    </div>
+  </nav>
+</div>
