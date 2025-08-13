@@ -1,4 +1,6 @@
 ---
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 ---
 
@@ -7,52 +9,31 @@ import "../styles/global.css";
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AstraParent</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>AstraParent | Clear, kind parenting help</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="header-nav">
-    <div class="header-content">
-      <div class="brand">
-        <h1>AstraParent</h1>
-        <span class="tagline">Clear, kind parenting help</span>
-      </div>
-      <div class="search-box">
-        <input type="search" placeholder="Ask your parenting questions..." />
-      </div>
-    </div>
-  </header>
+  <Header />
   
-  <div class="content-grid">
-    <div class="recent-posts">
-      <h2>Recent Articles</h2>
-      <p>Coming soon...</p>
+  <main class="container">
+    <div class="content-grid">
+      <section class="recent-posts">
+        <h2>Recent Articles</h2>
+        <p>Coming soon...</p>
+      </section>
+      
+      <section class="faq-section">
+        <h2>Common Questions</h2>
+        <p>Coming soon...</p>
+      </section>
+      
+      <aside class="parent-story sidebar">
+        <h3>Parent Story</h3>
+        <p>Coming soon...</p>
+      </aside>
     </div>
-    
-    <div class="faq-section">
-      <h2>Common Questions</h2>
-      <p>Coming soon...</p>
-    </div>
-    
-    <div class="parent-story">
-      <h3>Parent Story</h3>
-      <p>Coming soon...</p>
-    </div>
-  </div>
+  </main>
   
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-info">
-        <p><strong>AstraParent</strong></p>
-        <p>Contact: hello@astraparent.com</p>
-      </div>
-      <div class="social-links">
-        <a href="#">in</a>
-        <a href="#">fb</a>
-        <a href="#">ig</a>
-      </div>
-    </div>
-  </footer>
+  <Footer />
 </body>
 </html>

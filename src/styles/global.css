@@ -363,21 +363,12 @@ a {
   color: inherit;
   display: block;
 }
-echo '
+
 /* Dropdown Navigation Styles */
 .nav-wrapper {
   background: white;
   border-top: 1px solid var(--color-border);
   padding: 0 5%;
-}
-
-.nav-links {
-  display: flex;
-  gap: var(--space-xs);
-  padding: var(--space-sm) 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-  position: relative;
 }
 
 .nav-item {
@@ -402,7 +393,6 @@ echo '
   color: white;
 }
 
-/* Dropdown Menu */
 .dropdown {
   position: absolute;
   top: 100%;
@@ -444,4 +434,4 @@ echo '
 
 .brand h1 {
   font-size: 2rem;
-}' >> src/styles/global.css
+}
