@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClearCutParenting - Professional Parenting Guidance</title>
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Minimalist fonts - Elephant for titles, clean sans-serif for content -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Elephant font fallback -->
+  <style>
+    @font-face {
+      font-family: 'Elephant';
+      src: local('Elephant'), local('Elephant Regular');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+  
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+  
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2D5A27">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="No jargon. Just clear, kind parenting help for every stage from pregnancy to teens.">
+  <meta name="keywords" content="parenting, pregnancy, infant care, toddler, preschooler, teens, parenting advice">
+  <meta name="author" content="ClearCutParenting.com">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="ClearCutParenting - Clear, Kind Parenting Help">
+  <meta property="og:description" content="Expert parenting guidance without the jargon. From pregnancy through teens.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://clearcutparenting.com">
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay" aria-hidden="true">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading ClearCutParenting...</p>
+  </div>
+
+  <!-- Skip Navigation for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Minimalist Header -->
+  <header class="header-wrapper" id="stickyHeader" role="banner">
+    <div class="header-container">
+      <div class="title-section">
+        <h1 class="site-title"><strong>Clearcut Parenting</strong></h1>
+        <p class="tagline">No jargon. Just clear, kind parenting help</p>
+      </div>
+      
+      <div class="search-section">
+        <label for="searchInput" class="sr-only">Search parenting questions</label>
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Ask your questions here" 
+          autocomplete="off"
+          aria-describedby="search-results"
+          class="search-input"
+        >
+        <div id="search-results" class="search-results" aria-live="polite"></div>
+      </div>
+    </div>
+    
+    <!-- Clean Navigation -->
+    <nav class="main-navigation" role="navigation" aria-label="Age group navigation">
+      <a class="nav-link active" href="#pregnancy" data-section="pregnancy" aria-current="page">Pregnancy</a>
+      <a class="nav-link" href="#infants" data-section="infants">Infants (0–12 Mo)</a>
+      <a class="nav-link" href="#toddlers" data-section="toddlers">Toddlers (1–2)</a>
+      <a class="nav-link" href="#preschoolers" data-section="preschoolers">Preschoolers (3–5)</a>
+      <a class="nav-link" href="#schooler" data-section="schooler">Schooler (6–10)</a>
+      <a class="nav-link" href="#early-teens" data-section="early-teens">Early Teens (11–14)</a>
+      <a class="nav-link" href="#late-teens" data-section="late-teens">Late Teens (15–18)</a>
+      <a class="nav-link" href="#patreon" data-section="patreon">Patreon</a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content" id="main-content" role="main">
+    <!-- Advertisement Banner -->
+    <div class="ad-banner">
+      <div class="ad-content">
+        Advertisement Space (728 x 90)
+      </div>
+    </div>
+
+    <!-- Content Layout: 40% | 40% | 20% -->
+    <div class="content-layout">
+      <!-- FAQ Section -->
+      <section class="faq-section" id="faq-section" aria-labelledby="faq-heading">
+        <h2 id="faq-heading" class="section-title">The Most Commonly Asked Questions for Age Groups</h2>
+      
+        <div class="faq-grid">
+          <!-- Column 1 -->
+          <div class="faq-column">
+            <!-- Pregnancy FAQ -->
+            <article class="question-card pregnancy-card" data-category="pregnancy">
+              <div class="image-frame pregnancy-frame">
+                <img 
+                  src="./images/Pregnancy Drinking Water.avif" 
+                  alt="Pregnant woman drinking water - pregnancy nutrition safety" 
+                  loading="lazy"
+                  class="question-image"
+                >
+              </div>
+              <div class="question-content">
+                <div class="question-tag">[Pregnancy]</div>
+                <h3 class="question-text">Is it safe to eat sushi, deli meat, caffeine, soft cheese, and more?</h3>
+              </div>
+            </article>
+
+            <!-- Toddler FAQ -->
+            <article class="question-card toddler-card" data-category="toddler">
+              <div class="image-frame toddler-frame">
+                <img 
+                  src="./images/Toddler Not Happy.avif" 
+                  alt="Upset toddler expressing emotions - tantrum management"
+                  loading="lazy"
+                  class="question-image"
+                >
+              </div>
+              <div class="question-content">
+                <div class="question-tag">[Toddler 1–2]</div>
+                <h3 class="question-text">Why is my toddler tantruming so often—and how can I de-escalate it calmly?</h3>
+              </div>
+            </article>
+
+            <!-- Schooler FAQ -->
+            <article class="question-card schooler-card" data-category="schooler">
+              <div class="image-frame schooler-frame">
+                <img 
+                  src="./images/Schoolers on Desk.avif" 
+                  alt="School children at desk studying - homework motivation"
+                  loading="lazy"
+                  class="question-image"
+                >
+              </div>
+              <div class="question-content">
+                <div class="question-tag">[Schooler 6–10]</div>
+                <h3 class="question-text">Why does my child resist homework even when they're capable?</h3>
+              </div>
+            </article>
+
+            <!-- Late Teens FAQ -->
+            <article class="question-card late-teen-card" data-category="late-teen">
+              <div class="image-frame late-teen-frame">
+                <img 
+                  src="./images/Late Teens with books and bag.avif" 
+                  alt="Teen with school books and backpack - mental health awareness"
+                  loading="lazy"
+                  class="question-image"
+                >
+              </div>
+              <div class="question-content">
+                <div class="question-tag">[Late Teens 15–18]</div>
+                <h3 class="question-text">How do I know if my teen is at risk for depression, anxiety, or worse?</h3>
+              </div>
+            </article>
+          </div>
+          
+          <!-- Column 2 -->
+          <div class="faq-column">
+            <!-- Infant FAQ -->
+            <article class="question-card infant-card" data-category="infant">
+              <div class="image-frame infant-frame">
+                <img 
+                  src="./images/Infant Just born.avif" 
+                  alt="Newborn baby sleeping peacefully - infant sleep guidance"
+                  loading="lazy"
+                  class="question-image"
+                >
+              </div>
+              <div class="question-content">
+                <div class="question-tag">[Infant 0–12 months]</div>
+                <h3 class="question-text">How can I help my baby sleep independently without resorting to the 'cry it out' method?</h3>
+              </div>
+            </article>
+
+            <!-- Preschooler FAQ -->
+            <article class="question-card preschooler-card" data-category="preschooler">
+              <div class="image-frame preschooler-frame">
+                <img 
+                  src="./images/Preschooler pointing Who I am.avif" 
+                  alt="Confident preschooler pointing - kindergarten readiness"
+                  loading="lazy"
+                  class="question-image"
+                >
+              </div>
+              <div class="question-content">
+                <div class="question-tag">[Preschooler 3–5]</div>
+                <h3 class="question-text">How can I help my child adjust emotionally and socially to kindergarten?</h3>
+              </div>
+            </article>
+
+            <!-- Early Teens FAQ -->
+            <article class="question-card early-teen-card" data-category="early-teen">
+              <div class="image-frame early-teen-frame">
+                <img 
+                  src="./images/Early Teens Peer Pressure.avif" 
+                  alt="Young teens discussing together - cyberbullying prevention"
+                  loading="lazy"
+                  class="question-image"
+                >
+              </div>
+              <div class="question-content">
+                <div class="question-tag">[Early Teens 11–14]</div>
+                <h3 class="question-text">What should I do if my child is receiving mean messages or is cyberbullied?</h3>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Parent Story Section (20% width) -->
+      <aside class="parent-story" role="complementary" aria-labelledby="story-heading">
+        <h3 id="story-heading" class="story-title">Parent's Story</h3>
+        <p class="story-author">By Emma</p>
+        <p class="story-content">Last night at 3 a.m., I found myself sitting on the edge of my bed, bouncing Olivia on my knee for what felt like the hundredth time. My robe was stained with the evidence of our day, my hair had long escaped its messy bun, and I was running on cold coffee and sheer determination. In that soft glow of the nightlight, loving Olivia with every fiber of my being yet feeling like I was drowning, I wondered if I was doing any of this right. Every time I thought she was finally settled...</p>
+        
+        <div class="story-actions">
+          <button class="story-btn primary" data-action="read-more">Read Full Story</button>
+          <button class="story-btn secondary" data-action="share-story">Share Your Story</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Minimalist Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-content">
+      <div class="footer-info">
+        <p>ClearCutParenting.com is owned and operated by Safe Ride Co., LLC</p>
+        <p>Contact: <a href="mailto:Admin-clearcutparenting@woobrothers.com">Admin-clearcutparenting@woobrothers.com</a></p>
+        <div class="footer-links">
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#about">About</a>
+          <a href="#terms">Terms and Services</a>
+        </div>
+      </div>
+      <div class="social-links">
+        <a href="#linkedin" class="social-link" aria-label="Follow us on LinkedIn">
+          <img src="https://cdn-icons-png.flaticon.com/24/174/174857.png" alt="" width="20" height="20">
+        </a>
+        <a href="#instagram" class="social-link" aria-label="Follow us on Instagram">
+          <img src="https://cdn-icons-png.flaticon.com/24/2111/2111463.png" alt="" width="20" height="20">
+        </a>
+        <a href="#facebook" class="social-link" aria-label="Follow us on Facebook">
+          <img src="https://cdn-icons-png.flaticon.com/24/145/145802.png" alt="" width="20" height="20">
+        </a>
+        <a href="#pinterest" class="social-link" aria-label="Follow us on Pinterest">
+          <img src="https://cdn-icons-png.flaticon.com/24/145/145808.png" alt="" width="20" height="20">
+        </a>
+        <a href="#tiktok" class="social-link" aria-label="Follow us on TikTok">
+          <img src="https://cdn-icons-png.flaticon.com/24/3046/3046121.png" alt="" width="20" height="20">
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- JavaScript -->
+  <script src="script.js" defer></script>
+  
+  <!-- Service Worker Registration -->
+  <script>
+    // Auto-hide loading overlay
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const overlay = document.getElementById('loadingOverlay');
+        if (overlay) {
+          overlay.classList.add('fade-out');
+          setTimeout(() => overlay.remove(), 500);
+        }
+      }, 1200);
+    });
+
+    // Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(registration => console.log('SW registered'))
+          .catch(error => console.log('SW registration failed'));
+      });
+    }
+  </script>
+</body>
+</html>

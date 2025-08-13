@@ -1,9 +1,6 @@
-_site/
-.sass-cache/
-.jekyll-cache/
-.jekyll-metadata
+node_modules/
+dist/
+.cache/
 .DS_Store
-Thumbs.db
-*.swp
-.bundle/
-vendor/
+netlify/
+
