@@ -1,0 +1,36 @@
+echo '---
+const navItems = [
+  { label: "Pregnancy", href: "/pregnancy" },
+  { label: "Infants (0-12m)", href: "/infants" },
+  { label: "Toddlers (1-2)", href: "/toddlers" },
+  { label: "Preschoolers (3-5)", href: "/preschoolers" },
+  { label: "School (6-10)", href: "/school-age" },
+  { label: "Early Teens (11-14)", href: "/early-teens" },
+  { label: "Late Teens (15-18)", href: "/late-teens" },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="header-nav">
+  <div class="header-content">
+    <div class="brand">
+      <h1>AstraParent</h1>
+      <span class="tagline">Clear, kind parenting help</span>
+    </div>
+    <div class="search-box">
+      <input type="search" placeholder="Ask your parenting questions..." />
+    </div>
+  </div>
+  <nav class="nav-links">
+    {navItems.map(item => (
+      <a 
+        href={item.href}
+        class={currentPath.startsWith(item.href) ? "active" : ""}
+      >
+        {item.label}
+      </a>
+    ))}
+    <a href="/support" class="support-btn">Support Us</a>
+  </nav>
+</header>' > src/components/Header.astro

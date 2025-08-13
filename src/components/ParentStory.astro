@@ -1,0 +1,15 @@
+---
+export interface Props {
+  author: string;
+  excerpt: string;
+}
+
+const { author, excerpt } = Astro.props;
+---
+
+<aside class="parent-story sidebar">
+  <h3>Parent's Story</h3>
+  <p class="author">By {author}</p>
+  <p class="story">{excerpt}</p>
+  <a href="/stories" class="read-more">Read more stories →</a>
+</aside>

@@ -1,0 +1,43 @@
+---
+const faqs = [
+  {
+    ageGroup: "Pregnancy",
+    question: "Is it safe to eat sushi, deli meat, caffeine, soft cheese?",
+    href: "/pregnancy/food-safety"
+  },
+  {
+    ageGroup: "Infant 0-12 months",
+    question: "How can I help my baby sleep without cry-it-out?",
+    href: "/infants/gentle-sleep"
+  },
+  {
+    ageGroup: "Toddler 1-2",
+    question: "Why so many tantrums and how to handle calmly?",
+    href: "/toddlers/tantrums"
+  },
+  {
+    ageGroup: "Preschooler 3-5",
+    question: "How to help adjust to kindergarten?",
+    href: "/preschoolers/kindergarten"
+  },
+  {
+    ageGroup: "School 6-10",
+    question: "Why does my child resist homework?",
+    href: "/school-age/homework"
+  }
+];
+---
+
+<section class="faq-section">
+  <h2>Most Common Questions by Age</h2>
+  <ul>
+    {faqs.map(faq => (
+      <li>
+        <a href={faq.href}>
+          <div class="age-tag">[{faq.ageGroup}]</div>
+          <div class="question">{faq.question}</div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

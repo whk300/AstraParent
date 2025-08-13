@@ -1,0 +1,29 @@
+echo '---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+---
+
+<BaseLayout title="Home">
+  <Header />
+  <div class="container" style="padding: 2rem;">
+    <h2>Welcome to AstraParent</h2>
+    <p>Your trusted resource for clear, kind parenting guidance.</p>
+    
+    <div class="content-grid" style="margin-top: 2rem;">
+      <div class="recent-posts">
+        <h3>Recent Articles</h3>
+        <p>Coming soon...</p>
+      </div>
+      
+      <div class="faq-section">
+        <h3>Common Questions</h3>
+        <p>Coming soon...</p>
+      </div>
+      
+      <div class="parent-story">
+        <h3>Parent Stories</h3>
+        <p>Coming soon...</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>' > src/pages/index.astro
